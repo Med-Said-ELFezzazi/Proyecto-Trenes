@@ -29,7 +29,7 @@
             
             $resultado = [];
             foreach ($ciudades as $ciudad) {
-                $campo = ($tipo === 'origen') ? 'ciudad_origin' : 'ciudad_destino';
+                $campo = ($tipo === 'origen') ? 'origen' : 'destino';
                 $resultado[$ciudad->$campo] = $ciudad->$campo;
             }
             return $resultado;
@@ -54,8 +54,8 @@
             // $fechaIda = $_POST['fecha_ida'];
             // $fechaVuelta = $_POST['fecha_vuelta'];
             $fecha = $_POST['fecha_ida'];
-            $origen = $_POST['ciudad_origen'];
-            $destino = $_POST['ciudad_destino'];
+            $origen = $_POST['origen'];
+            $destino = $_POST['destino'];
             $Numbilletes = $_POST['Numbilletes'];            
             
             // Para rellenar los campos de origen y destino
@@ -245,8 +245,8 @@
                 $emailCliente = $this->modeloClientes->dameCliente(session()->get('dniCliente'))->email;
                 $fechaIda = $datosRuta->fecha;
                 $horaSalidaIda = $datosRuta->hora_salida;
-                $origen = $datosRuta->ciudad_origin;
-                $destino = $datosRuta->ciudad_destino;
+                $origen = $datosRuta->origen;
+                $destino = $datosRuta->destino;
                 $arrNumTicket = $this->modeloReservas->dameIdTicket(session()->get('dniCliente'), $id_ruta, date('Y-m-d'));
                 
                 $emailEnviado = $this->enviarEmailCompra($emailCliente, $fechaIda, $horaSalidaIda, 
@@ -284,8 +284,8 @@
                     // Recoger los datos a enviar
                     $datos[] = ['id_ticket' => $reserva->id_ticket,
                             'id_ruta' => $reserva->id_ruta,
-                            'cOrigen' => $ruta->ciudad_origin,
-                            'cDestino' => $ruta->ciudad_destino,
+                            'cOrigen' => $ruta->origen,
+                            'cDestino' => $ruta->destino,
                             'hLlegada' => $ruta->hora_llegada,
                             'imagen' => $imgTren->imagen
                             ];
@@ -318,8 +318,8 @@
                     // Recoger los datos a enviar
                     $datos[] = ['id_ticket' => $reserva->id_ticket,
                             'id_ruta' => $reserva->id_ruta,
-                            'cOrigen' => $ruta->ciudad_origin,
-                            'cDestino' => $ruta->ciudad_destino,
+                            'cOrigen' => $ruta->origen,
+                            'cDestino' => $ruta->destino,
                             'hLlegada' => $ruta->hora_llegada,
                             'imagen' => $imgTren->imagen
                             ];
