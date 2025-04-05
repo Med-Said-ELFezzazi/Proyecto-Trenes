@@ -4,16 +4,16 @@
         <?php
             $arrCiudadesExistentes = [];
             foreach ($datosTarifas as $index => $viaje) {
-                if (!in_array($viaje->ciudad_origin, $arrCiudadesExistentes)) {
+                if (!in_array($viaje->origen, $arrCiudadesExistentes)) {
                     // Cerrar la tabla anterior si existe
                     if (!empty($arrCiudadesExistentes)) {
                         echo "</tbody>";
                         echo "</table>";
                     }
                     // Añadir la ciudad al array
-                    array_push($arrCiudadesExistentes, $viaje->ciudad_origin);
+                    array_push($arrCiudadesExistentes, $viaje->origen);
                     // Poner el titulo
-                    echo "<h3>Salidas de " . $viaje->ciudad_origin . "</h3>";
+                    echo "<h3>Salidas de " . $viaje->origen . "</h3>";
                     echo '<table class="table">';
                         echo '<thead>';
                             echo '<tr>';
@@ -28,7 +28,7 @@
                 // Poner datos tarifas
                 echo "<tr>";
                     echo "<td class='casillas'>";
-                        echo $viaje->ciudad_origin . " → " . $viaje->ciudad_destino;
+                        echo $viaje->origen . " → " . $viaje->destino;
                     echo "</td>";
         
                     echo "<td class='casillas'>";
