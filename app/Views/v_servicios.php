@@ -4,9 +4,9 @@
             <td>Fecha:</td>
             <td><b><i><?= $_POST['fecha_ida']; ?></i></b></td>
             <td>Salida:</td>
-            <td><b><i><?= $_POST['ciudad_origen']; ?></i></b></td>
+            <td><b><i><?= $_POST['origen']; ?></i></b></td>
             <td>Llegada:</td>
-            <td><b><i><?= $_POST['ciudad_destino']; ?></i></b></td>
+            <td><b><i><?= $_POST['destino']; ?></i></b></td>
         </tr>
         <tr>
         <td colspan="6"><b>SERVICIOS POSIBLES PARA LA IDA</b></td>

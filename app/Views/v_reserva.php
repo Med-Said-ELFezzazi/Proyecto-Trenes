@@ -5,7 +5,7 @@
     $numBilletesSel = 1;
     if (isset($_POST['verServicios'])) {
         // Validación de origen y destino
-        if ($_POST['ciudad_origen'] == $_POST['ciudad_destino']) {
+        if ($_POST['origen'] == $_POST['destino']) {
             $error .= 'El origen y destino no pueden ser iguales';
         } else if (!isset($_POST['asientoAleatorio']) && $_POST['asiento'] == '') {
             $error .= 'Debe introducir un número de asiento o marcar la casilla de asiento aleatorio';
@@ -112,7 +112,7 @@
                                     <div class="col-md-6">
                                         <label class="form-label">Origin</label>
                                         <?php 
-                                            echo form_dropdown('ciudad_origen', $ciudadesOrg, $_POST['ciudad_origen'] ?? null, [
+                                            echo form_dropdown('origen', $ciudadesOrg, $_POST['origen'] ?? null, [
                                                     'class' => 'form-select'
                                                 ]);                                 
                                         ?>
@@ -120,7 +120,7 @@
                                     <div class="col-md-6">
                                         <label class="form-label">Destino</label>
                                         <?php 
-                                            echo form_dropdown('ciudad_destino', $ciudadesDes, $_POST['ciudad_destino'] ?? null, [
+                                            echo form_dropdown('destino', $ciudadesDes, $_POST['destino'] ?? null, [
                                                     'class' => 'form-select'
                                                 ]);                                 
                                         ?>

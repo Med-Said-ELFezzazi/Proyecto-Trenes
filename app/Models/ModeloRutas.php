@@ -206,36 +206,6 @@
 
     }
 
-
-    
-
-
-
-    // Funcion que devuelve datos de una ruta pasado su id_ruta en param
-    // public function viajesTranscuridos($id_ruta) {
-    //     // fecha tiene que ser en el pasado o de hoy pero con hora_salida antes de la hora actual
-    //     $fechaActual = date('Y-m-d');
-    //     $horaActual = date('H:i');
-    //     $data = $this->where('id_ruta', $id_ruta)
-    //                 ->groupStart()
-    //                     ->where('fecha <', $fechaActual)
-    //                     ->orGroupStart()
-    //                         ->where('fecha', $fechaActual)
-    //                         ->where('hora_salida <', $horaActual)
-    //                     ->groupEnd()
-    //                 ->groupEnd()
-    //                 ->findAll();
-
-    //     return empty($data) ? [] : $data;
-    // }
-
-
-
-    // Función que devuelve las rutas transcurridas
-    public function viajesTranscuridos($id_ruta) {
-
-    }
-
     
     
 }
