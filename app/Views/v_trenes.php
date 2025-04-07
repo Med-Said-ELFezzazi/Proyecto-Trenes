@@ -28,28 +28,20 @@ if (isset($_POST['aniadirTren'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trenes</title>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-
+        document.addEventListener('DOMContentLoaded', function () {
             // Función cambia entre la vista de listar infos y añadir nuevo tren
             function cambiarVista() {
-                // Obtener el texto del button Añadir nuevo tren
                 let btnAniadirTren = document.getElementById('btnAniadirTren');
                 let textoBtn = btnAniadirTren.textContent;
 
-                if (textoBtn == 'Añadir nuevo Tren') {
-                    // Cambio del texto titulo
+                if (textoBtn == 'Añadir nuevo tren') {
                     document.getElementById('titulo-vista').textContent = 'Añadir nuevo tren';
-                    // Cambio el texto del button
                     btnAniadirTren.textContent = 'Listar datos';
-                    // Cambio la vista al form
                     document.getElementById('trenInfo').classList.add('d-none');
                     document.getElementById('nuevoTrenForm').classList.remove('d-none');
                 } else {
-                    // Cambio del texto titulo
                     document.getElementById('titulo-vista').textContent = 'Información de trenes';
-                    // Cambio el texto del button
                     btnAniadirTren.textContent = 'Añadir nuevo tren';
-                    // Cambio la vista a la info
                     document.getElementById('nuevoTrenForm').classList.add('d-none');
                     document.getElementById('trenInfo').classList.remove('d-none');
                 }
@@ -57,73 +49,62 @@ if (isset($_POST['aniadirTren'])) {
 
             let btnAniadirTren = document.getElementById('btnAniadirTren');
             btnAniadirTren.addEventListener('click', cambiarVista);
-        });
-        
-        document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.btn-editar').forEach(function(btnEditar) {
-            btnEditar.addEventListener('click', function() {
-                const fila = this.closest('tr'); // Fila actual
-                const form = fila.querySelector('.tren-form'); // Formulario de la fila
-                const editando = fila.classList.contains('editando'); // Verificar modo edición
 
-                if (!editando) {
-                    // Cambiar texto de la fila a inputs
-                    fila.querySelectorAll('[data-field]').forEach(function(campo) {
-                        const nomInput = campo.getAttribute('data-field');
-                        const tipo = nomInput === 'modelo' ? 'text' : 'number';
-                        const value = campo.textContent.trim();
+            // Funcionalidad de editar y guardar
+            document.querySelectorAll('.btn-editar').forEach(function (btnEditar) {
+                btnEditar.addEventListener('click', function () {
+                    const fila = this.closest('tr');
+                    const form = fila.querySelector('.tren-form');
+                    const editando = fila.classList.contains('editando');
 
-                        // Crear un nuevo input y agregarlo al campo
-                        const input = document.createElement('input');
-                        input.type = tipo;
-                        input.name = nomInput;
-                        input.value = value;
-                        input.className = 'form-control';
+                    if (!editando) {
+                        fila.querySelectorAll('[data-field]').forEach(function (campo) {
+                            const nomInput = campo.getAttribute('data-field');
+                            const tipo = nomInput === 'modelo' ? 'text' : 'number';
+                            const value = campo.textContent.trim();
 
-                        // Reemplazar el contenido del campo con el nuevo input
-                        campo.innerHTML = '';
-                        campo.appendChild(input);
-                    });
+                            const input = document.createElement('input');
+                            input.type = tipo;
+                            input.name = nomInput;
+                            input.value = value;
+                            input.className = 'form-control';
 
-                    // Cambiar botón a "Guardar"
-                    this.textContent = 'Guardar';
-                    fila.classList.add('editando');
-                } else {
-                    // Validar los campos antes de enviar el formulario
-                    const inputs = fila.querySelectorAll('input');
-                    let valido = true;
-
-                    inputs.forEach(function(input) {
-                        if (!input.value.trim()) {
-                            valido = false;
-                            alert(`El campo ${input.name} no puede estar vacío.`);
-                        }
-                    });
-
-                    if (valido) {
-                        // Actualizar los campos ocultos con los nuevos valores
-                        inputs.forEach(function(input) {
-                            let hiddenInput = form.querySelector(`input[type="hidden"][name="${input.name}"]`);
-                            if (!hiddenInput) {
-                                // Crear un campo hidden si no existe
-                                hiddenInput = document.createElement('input');
-                                hiddenInput.type = 'hidden';
-                                hiddenInput.name = input.name;
-                                form.appendChild(hiddenInput);
-                            }
-                            hiddenInput.value = input.value; // Actualizar el valor del campo oculto
+                            campo.innerHTML = '';
+                            campo.appendChild(input);
                         });
 
-                        // Añadir atributo name al botón
-                        this.setAttribute('name', 'btnModificar');
+                        this.textContent = 'Guardar';
+                        fila.classList.add('editando');
+                    } else {
+                        const inputs = fila.querySelectorAll('input');
+                        let valido = true;
 
-                        // Enviar el formulario al hacer clic en "Guardar"
-                        form.submit();
+                        inputs.forEach(function (input) {
+                            if (!input.value.trim()) {
+                                valido = false;
+                                alert(`El campo ${input.name} no puede estar vacío.`);
+                            }
+                        });
+
+                        if (valido) {
+                            inputs.forEach(function (input) {
+                                let hiddenInput = form.querySelector(`input[type="hidden"][name="${input.name}"]`);
+                                if (!hiddenInput) {
+                                    hiddenInput = document.createElement('input');
+                                    hiddenInput.type = 'hidden';
+                                    hiddenInput.name = input.name;
+                                    form.appendChild(hiddenInput);
+                                }
+                                hiddenInput.value = input.value;
+                            });
+
+                            this.setAttribute('name', 'btnModificar');
+                            form.submit();
+                        }
                     }
-                }
+                });
             });
         });
-    });
     </script>
 
 </head>
@@ -212,7 +193,7 @@ if (isset($_POST['aniadirTren'])) {
         </div>
 
         <!-- Formulario para añadir nuevo tren -->
-        <div id="nuevotrenForm" class="d-none">
+        <div id="nuevoTrenForm" class="d-none">
             <h3 class="text-center text-success">Rellena los siguientes datos</h3>
             <?= form_open(site_url('/admin/trenes'), ['method' => 'post', 'enctype' => 'multipart/form-data']) ?>
             <div class="form-group">
@@ -227,12 +208,12 @@ if (isset($_POST['aniadirTren'])) {
                 ?>
             </div>
             <div class="form-group">
-                <label for="num_serie">Num_serie</label>
+                <label for="numSerie">Num_serie</label>
                 <?php
                 echo form_input([
                     'type' => 'text',
-                    'name' => 'num_serie',
-                    'id' => 'num_serie',
+                    'name' => 'numSerie',
+                    'id' => 'numSerie',
                     'class' => 'form-control',
                     'required' => 'required'
                 ]);
@@ -258,6 +239,18 @@ if (isset($_POST['aniadirTren'])) {
                     'type' => 'text',
                     'name' => 'modelo',
                     'id' => 'modelo',
+                    'class' => 'form-control',
+                    'required' => 'required'
+                ]);
+                ?>
+            </div>
+            <div class="form-group">
+                <label for="bagon">Bagones</label>
+                <?php
+                echo form_input([
+                    'type' => 'text',
+                    'name' => 'bagones',
+                    'id' => 'bagones',
                     'class' => 'form-control',
                     'required' => 'required'
                 ]);

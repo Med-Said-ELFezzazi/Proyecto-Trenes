@@ -50,7 +50,7 @@
 
                 $msg = '';
                 if (!$this->numSerieValido($num_serie)) {
-                    $msg .= 'Número de serie errónea! (Tiene que tener exactamente 12 dígitos)<br>';
+                    $msg .= 'Número de serie erróneo! (Tiene que tener exactamente 12 dígitos)<br>';
                 }
                 if ($this->numSerieYaExiste($num_serie)) {
                     $msg .= 'Número de serie ya existe!';
