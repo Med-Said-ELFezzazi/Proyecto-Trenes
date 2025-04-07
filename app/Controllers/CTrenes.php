@@ -6,7 +6,7 @@
     use App\Models\ModeloRutas;
 
 
-    class CBuses extends BaseController {
+    class CTrenes extends BaseController {
         protected $modeloRutas;
         protected $modeloTrenes;
 
@@ -41,7 +41,7 @@
 
 
 
-        public function administracionBuses(){
+        public function administracionTrenes(){
             $datosTrenes = $this->modeloTrenes->datosTrenes();
 
             // Añadir nuevo tren
@@ -123,10 +123,10 @@
             if (isset($_POST['borrarTren'])) {
                 // Obtener la num_Serie
                 $num_serie = $_POST['numSerie'];
-                // Antes de eliminar un bus deberia checkear si esta usado en alguna ruta en una fecha del futuro o el mismo dia
-                $trenYaEnUso = $this->modeloRutas->trenEnUso($num_serie); // Bus se usa en fecha futura
+                // Antes de eliminar un tren deberia checkear si esta usado en alguna ruta en una fecha del futuro o el mismo dia
+                $trenYaEnUso = $this->modeloRutas->trenEnUso($num_serie); // tren se usa en fecha futura
 
-                $trenUsadoSoloPasado = $this->modeloRutas->busUsadoPasado($num_serie);   // Bus ha sido usado antes y ya no
+                $trenUsadoSoloPasado = $this->modeloRutas->trenUsadoPasado($num_serie);   // tren ha sido usado antes y ya no
                 if ($trenUsadoSoloPasado) {
                     // Eliminar registros de rutas pasadas
                     $this->modeloRutas->eliminarRutasNumSerie($num_serie);
@@ -144,7 +144,7 @@
                     foreach ($idRutas as $ruta) {
                         $rutasStr .= $ruta->id_ruta . ',';
                     }
-                    // Error no se puede eliminar el bus
+                    // Error no se puede eliminar el tren
                     $msj = 'No se puede eliminar el tren con el número de serie: ' . $num_serie . ' ya que esta en uso <br>
                         Considera eliminar primero las rutas que tiene asignado <br>
                         Nº de rutas: ' . $rutasStr . '<br><i> (Solo se eliminan trenes con rutas antiguas de la fecha de hoy)</i>';
@@ -154,12 +154,12 @@
                     ]);
                 } else {
                     // Suprimir su imagen de images/trenes
-                    $trenObj = $this->modeloTrenes->dameDatosBus($num_serie);
+                    $trenObj = $this->modeloTrenes->dameDatosTren($num_serie);
                     if ($trenObj->imagen != 'sinImg.png') {      // tren tiene imagen
                         $rutaCompleta = WRITEPATH . '../public/images/trenes/' . $trenObj->imagen ;
                         unlink($rutaCompleta);      // Eliminar img
                     }
-                    // Eliminar el bus de BD
+                    // Eliminar el tren de BD
                     $eliminacionExito = $this->modeloTrenes->eliminarTren($num_serie);
 
                     return view('v_home', [
@@ -176,7 +176,7 @@
 
 
 
-        // Función que actualiza datos de un bus pasando su matricula
+        // Función que actualiza datos de un tren pasando su matricula
         public function modificarTren($num_serie) {
             $tren = $this->modeloTrenes->dameDatosTren($num_serie);
               
@@ -249,7 +249,7 @@
                 }
             }
                 
-            // Cargar la vista v_modBus
+            // Cargar la vista v_modTren
             return view('v_home', ['trenMod' => $tren]);
         }
 

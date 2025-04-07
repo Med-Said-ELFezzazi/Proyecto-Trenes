@@ -159,7 +159,7 @@ if (isset($_POST['aniadirTren'])) {
         if (isset($_POST['btnModificar'])) {
             echo $mod;
         }
-        var_dump($_POST); // Muestra los datos enviados por el formulario
+        // var_dump($_POST); // Muestra los datos enviados por el formulario
 
         ?>
 
@@ -195,7 +195,7 @@ if (isset($_POST['aniadirTren'])) {
                                 <?= form_hidden('modelo', $tren->modelo); ?>
 
 
-                                <?= form_hidden('num_serie', $tren->num_serie); ?>
+                                <?= form_hidden('numSerie', $tren->num_serie); ?>
                                 <?= form_input([
                                     'name' => 'borrarTren',
                                     'type' => 'submit',
