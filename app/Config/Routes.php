@@ -61,3 +61,6 @@ $routes->match(['GET', 'POST'], '/admin/rutas/modificar/(:num)', 'CRutas::modifi
 $routes->get('/opinion', 'CReserva::opinar');
 // Insertar opinión
 $routes->post('/opinion/add' , 'CReserva::insertarOpinion');
+
+
+//Se me sale el semens
