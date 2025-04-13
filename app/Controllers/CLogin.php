@@ -36,7 +36,7 @@
                 return "DNI inválido! \t 'Tiene que tener 8 Números y 1 Letra'";
             }
             // Tele
-            if (strlen($tele) > 13) {    // (de momento compruebo si la longitud es correcta o no)
+            if ((substr($tele, 0, 1) != '6' && substr($tele, 0, 1) != '9') || strlen($tele) > 9) {
                 return "Número de telefono inválido!";
             }
             // Password
