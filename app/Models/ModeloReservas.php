@@ -107,4 +107,60 @@
         return $asientos;       // Devuelve un array de objetos 'num asiento'
     }
 
+    // Función que elimina reservas de ruta pasando su id_ruta en param
+    public function eliminarReservasRuta($id_ruta) {
+        $this->where('id_ruta', $id_ruta)
+        ->delete('reservas');
+    }
+
+
+    // funcion que insertar opinion a unas reservas pasadas en formato array y el dni del cliente
+    public function insertarOpinion($id_tickets, $opinion, $dni){
+        $this->db->transStart();
+        //'un cliente puede reservar más de un billete de un viaje'
+        // Array aux para dar el mismo opinion a todas las resevas con la misma ruta
+        $arrRutas = []; 
+        foreach ($id_tickets as $id_ticket) {
+            $reserva = $this->find($id_ticket); // La reserva formato objeto
+            if (!in_array($reserva->id_ruta, $arrRutas)) {
+                // Actualizar todas las reservas con el mismo id_ruta
+                $data = [
+                    'opinion' => $opinion,
+                    'fecha_opinion' => date('Y-m-d H:i:s')
+                ];
+
+                $this->where('id_ruta', $reserva->id_ruta)
+                    ->where('dni', $dni)
+                    ->update(null, $data);
+                
+                $arrRutas[] = $reserva->id_ruta;
+            }
+        }
+
+        $this->db->transComplete();
+
+        return $this->db->transStatus();
+    }
+
+
+    // Función que devuelve reservas sin opinión de un cliente pasado su dni
+    public function reservasSinOpinionCli($dni) {
+        $reservas = $this
+                    ->where('dni', $dni)
+                    ->where('opinion', '')
+                    ->groupBy('id_ruta')    // Para obtener rutas únicas 'pq un cliente puede hacer varias reservas para una ruta'
+                    ->findAll();
+        return empty($reservas) ? [] : $reservas;
+    }
+
+
+
+    public function asientoOcupado($id_ruta, $num_asiento) {
+        return $this->where('id_ruta', $id_ruta)
+                    ->where('num_asiento', $num_asiento)
+                    ->countAllResults() > 0;
+    }
+
+
+
 }

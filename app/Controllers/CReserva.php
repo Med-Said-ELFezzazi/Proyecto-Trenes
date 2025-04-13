@@ -346,11 +346,9 @@
                 // Insertar la opinión
                 $insertados = $this->modeloReservas->insertarOpinion($_POST['reservasSel'], $opinion, $dniCli);
                 if ($insertados) {
-                    return view('v_home', ['datosOpinion' => $datos,
-                                            'msgInfoOpi' => 'Gracias por tu opinión <br> Tu opinión ha sido guardado correctamente']);
+                    return redirect()->to('/opinion')->with('msgInfoOpi', 'Gracias por tu opinión <br> Tu opinión ha sido guardado correctamente');
                 } else {
-                    return view('v_home', ['datosOpinion' => $datos,
-                                            'msgErrOpin' => 'ERROR de inserción en la BD!']);
+                    return redirect()->to('/opinion')->with('msgErrOpin', 'ERROR de inserción en la BD!');
                 }
             }
         }
