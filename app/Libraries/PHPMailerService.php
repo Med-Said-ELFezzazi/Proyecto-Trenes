@@ -22,7 +22,7 @@
         }
 
         // Función que configura los parámetros del correo, como el remitente, destinatario..., utilizando PHPMailer.
-        public function sendEmail($to, $subject, $body, $from = "saidfcb2@gmail.com", $fromName = "Aplicacion web Autobuses") {
+        public function sendEmail($to, $subject, $body, $from = "saidfcb2@gmail.com", $fromName = "Aplicacion web Trenes") {
             try {
                 $this->mail->setFrom($from, $fromName);
                 $this->mail->addAddress($to);

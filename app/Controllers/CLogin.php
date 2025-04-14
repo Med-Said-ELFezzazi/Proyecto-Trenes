@@ -109,8 +109,13 @@
                     return redirect()->to(site_url('autenticacion'));
                 } else {
                     // Comprobar si el cliente ya existe en la BD 'tiene que ser el dni y el correo unico'
-                    if ($this->modeloClientes->autenticacion($email, $pwd) != null || $this->modeloClientes->dniExiste($dni)) {
-                        // Envio el msg de error
+                    if ($this->modeloClientes->dniExiste($dni)) {
+                        $this->session->setFlashdata(['error' => "El cliente con el DNI: {$dni} ya está registrado!"]);
+                        return redirect()->to(site_url('autenticacion'));
+                    } elseif ($this->modeloClientes->emailExiste($email)) {
+                        $this->session->setFlashdata(['error' => 'El correo electrónico ya está registrado!']);
+                        return redirect()->to(site_url('autenticacion'));
+                    } elseif ($this->modeloClientes->autenticacion($email, $pwd) != null) {
                         $this->session->setFlashdata(['error' => 'Cliente ya existe!']);
                         return redirect()->to(site_url('autenticacion'));
                     } else {

@@ -48,6 +48,15 @@
         return $cliente ? true : false;
     }
 
+    // Fucnión que verifica si un correo ya existe eb la BD
+    public function emailExiste($email) {
+        $cliente = $this
+        ->select('email')
+        ->where('email', $email)
+        ->first();
+        return $cliente ? true : false;
+    }
+
 
     // Función que devuelve datos de un cliente formato objeto pasandole su dni
     public function dameCliente($dni) {
