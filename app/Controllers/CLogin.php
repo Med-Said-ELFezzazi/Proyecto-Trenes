@@ -35,6 +35,9 @@
             if (!$this->dniValido($dni)) {
                 return "DNI inválido! \t 'Tiene que tener 8 Números y 1 Letra'";
             }
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                return "El correo no es valido!";
+            }
             // Tele
             if ((substr($tele, 0, 1) != '6' && substr($tele, 0, 1) != '9') || strlen($tele) > 9) {
                 return "Número de telefono inválido!";
@@ -91,7 +94,7 @@
                 // Obtener los datos inputs
                 $dni = $this->request->getPost("registroDni");
                 $nombre = $this->request->getPost("registroNom");   
-                $email = $this->request->getPost("registroEmail");  // Esto el Input type email que se encarga de ello 
+                $email = $this->request->getPost("registroEmail");
                 $tele = $this->request->getPost("registroTele");
                 $pwd = $this->request->getPost("registroPwd");
 

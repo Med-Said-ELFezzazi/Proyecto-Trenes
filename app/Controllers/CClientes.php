@@ -14,36 +14,63 @@
             $this->modeloClientes = new ModeloClientes();
             $this->modeloRutas = new ModeloRutas();
         }
-
-
+            
         // Función que modifica los datos del cliente logeado
         public function modificarCliente() {
-            // Compruebo se haya logeado el cliente o si no al login 'extra precaucion'
             if (session()->get('dniCliente') == null) {
                 return redirect()->to(site_url('autenticacion'));
             } else {
-                $dniCliente = session()->get("dniCliente"); // dni de la sesión
+                $dniCliente = session()->get("dniCliente");     // dni de la sesión
                 $clienteObj = $this->modeloClientes->dameCliente($dniCliente);
-                $msg = "";      // Msg de confirmacio/error de modificación
+                
                 // Comprueba si haya dado al btotón de modificar
                 if ($this->request->getPost("submitModificar")) {
-                    // Obtener los datos de los nuevos campos
                     $newNom = $this->request->getPost("modNom");
-                    $newEmail = $this->request->getPost("modEmail");
-                    // quitar los espacios al principio y al final del email
-                    $newEmail = trim($newEmail);
+                    $newEmail = trim($this->request->getPost("modEmail"));
                     $newTele = $this->request->getPost("modTele");
                     $newPwd = $this->request->getPost("modPwd");
-                    // Hace la actualización en la BD
-                    $actualizado = $this->modeloClientes->actualizarCliente($dniCliente ,$newNom, $newEmail, $newTele, $newPwd);
-                    $msg .= $actualizado ? "Datos modificados correctamente" : "Error al modificar los datos!";
+
+                    $msgErr = '';
+                    // Validaciones de nuevos datos
+                    if ((substr($newTele, 0, 1) != '6' && substr($newTele, 0, 1) != '9') || strlen($newTele) > 9) {
+                        $msgErr .= "Número de telefono inválido!<br>";
+                    }
+                    if (strlen($newPwd) != 0 && strlen($newPwd) < 8) {
+                        $msgErr .= "Contraseña débil. Debe tener exactamente 8 caracteres!<br>";
+                    }
+                    // Validar el correo
+                    if (!filter_var($newEmail, FILTER_VALIDATE_EMAIL)) {
+                        $msgErr .= "El correo no es valido!<br>";
+                    }
+                    // Ya existe un correo igual perteneciendo a un cliente en la BD
+                    if ($this->modeloClientes->emailExiste($newEmail) && $newEmail != $clienteObj->email) {
+                        $msgErr .= 'El correo electrónico ya está registrado!<br>';
+                    }
+
+                    // Si hay errores, redirige con los mensajes
+                    if (!empty($msgErr)) {
+                        return redirect()->to(site_url('modificarCliente'))->with('msgErr', $msgErr);
+                    }
+
+                    // Actualizar solo si no hubo errores
+                    $actualizado = $this->modeloClientes->actualizarCliente($dniCliente, $newNom, $newEmail, $newTele, $newPwd);
+
+                    $msg = $actualizado ? "Datos modificados correctamente." : "¡Error al modificar los datos!";
+                    return redirect()->to(site_url('modificarCliente'))->with('msg', $msg);
                 }
-                // Siempre es obligatorio pasar datos dentro un array asociativo
-                return view("v_modificarCliente", 
-                            ['clienteObj' => $clienteObj,
-                            'msg' => $msg]);
+        
+                // Recupera el mensaje si existe
+                $msg = session()->getFlashdata('msg') ?? "";
+                $msgErr = session()->getFlashdata('msgErr') ?? "";
+        
+                return view("v_modificarCliente", [
+                    'clienteObj' => $clienteObj,
+                    'msg' => $msg,
+                    'msgErr' => $msgErr
+                ]);
             }
         }
+        
 
     }
 ?>

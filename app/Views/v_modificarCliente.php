@@ -13,6 +13,22 @@
             <link rel="stylesheet" href="<?= base_url('css/styleAut.css'); ?>">
         </head>
         <body>
+            <!-- Mostrar msg info -->                
+            <?php if ($msg != ""): ?>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <?= $msg; ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <?php endif; ?>
+            <!-- Mostrar msg error -->                
+            <?php if ($msgErr != ""): ?>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <?= $msgErr; ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <?php endif; ?>
+
+
             <div class="container auth-container">
                 <h1 style="display:flex; justify-content:center;">Modificar tus datos</h1>
 
@@ -46,7 +62,8 @@
                                 'id' => 'registroEmail',
                                 'class' => 'form-control',
                                 'value' => $clienteObj->email,
-                                'placeholder' => 'Introduce tu correo']);
+                                'placeholder' => 'Introduce tu correo',
+                                'required' => true]);
                             ?>
                         </div>
                     </div>
@@ -93,13 +110,6 @@
                     <?php form_close(); ?>
                 </div>
             </div>
-            <!-- Mostrar msg info -->                
-            <?php if ($msg != ""): ?>
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <?= $msg; ?>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            <?php endif; ?>
         </body>
     </html>
 
