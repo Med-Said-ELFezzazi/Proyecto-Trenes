@@ -12,7 +12,7 @@
     protected $returnType     = 'object';
     protected $useSoftDeletes = false;
 
-    protected $allowedFields = ['capacidad', 'modelo', 'bagones', 'imagen'];
+    protected $allowedFields = ['capacidad', 'modelo', 'vagones', 'imagen'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -34,12 +34,12 @@
     
 
     // Función que inserta un nuevo tren
-    public function insertarTren($num_serie, $capacidad, $modelo, $bagones, $img) {
+    public function insertarTren($num_serie, $capacidad, $modelo, $vagones, $img) {
         $datos = [
             'num_serie' => trim(strtoupper($num_serie)),
             'capacidad' => $capacidad,
             'modelo' => $modelo,
-            'bagones' => $bagones,
+            'vagones' => $vagones,
             'imagen' => $img
         ];
 
@@ -64,12 +64,12 @@
     
 
     // Función que modifica los datos de un tren
-    public function actualizarTren($num_serie, $capacidad, $modelo, $bagones, $imagen = null) {
+    public function actualizarTren($num_serie, $capacidad, $modelo, $vagones, $imagen = null) {
         // Datos básicos que siempre se actualizan
         $datos = [
             'capacidad' => $capacidad,
             'modelo' => $modelo,
-            'bagones' => $bagones
+            'vagones' => $vagones
         ];
         
         if (!is_null($imagen)) {

@@ -128,7 +128,7 @@ CREATE TABLE `trenes` (
   `num_serie` varchar(12) NOT NULL,
   `capacidad` int(11) NOT NULL,
   `modelo` varchar(200) NOT NULL,
-  `bagones` int(11) NOT NULL,
+  `vagones` int(11) NOT NULL,
   `imagen` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -136,7 +136,7 @@ CREATE TABLE `trenes` (
 -- Volcado de datos para la tabla `trenes`
 --
 
-INSERT INTO `trenes` (`num_serie`, `capacidad`, `modelo`, `bagones`, `imagen`) VALUES
+INSERT INTO `trenes` (`num_serie`, `capacidad`, `modelo`, `vagones`, `imagen`) VALUES
 ('11111111111D', 200, 'Mercedes', 4, 'mercedes.jpg'),
 ('22222222222T', 150, 'Ford', 5, 'ford.jpg');
 

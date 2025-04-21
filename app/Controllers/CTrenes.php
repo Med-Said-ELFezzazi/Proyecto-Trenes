@@ -81,9 +81,9 @@
                         // Guardar los datos del Trenes en la BD
                         $capacidad = $_POST['capacidad'];
                         $modelo = $_POST['modelo'];
-                        $bagones = $_POST['bagones'];
+                        $vagones = $_POST['vagones'];
                         
-                        $trenInsertado = $this->modeloTrenes->insertarTren($num_serie, $capacidad, $modelo,$bagones, $nomImg);
+                        $trenInsertado = $this->modeloTrenes->insertarTren($num_serie, $capacidad, $modelo,$vagones, $nomImg);
                         if ($trenInsertado) {
                             return view('v_home', [
                                 'datosTrenes' => $datosTrenes,
@@ -99,9 +99,9 @@
                         // No se ha subido la imagen 'guardar el Trene con imagen sinImg.png'
                         $capacidad = $_POST['capacidad'];
                         $modelo = $_POST['modelo'];
-                        $bagones = $_POST['bagones'];
+                        $vagones = $_POST['vagones'];
 
-                        $trenInsertado = $this->modeloTrenes->insertarTren($num_serie, $capacidad, $modelo, $bagones, 'sinImg.png');
+                        $trenInsertado = $this->modeloTrenes->insertarTren($num_serie, $capacidad, $modelo, $vagones, 'sinImg.png');
                         if ($trenInsertado) {
                             return view('v_home', [
                                 'datosTrenes' => $datosTrenes,
@@ -186,7 +186,7 @@
                 // Obtener nuevos datos del Trenes
                 $capacidad = $_POST['capacidad'];
                 $modelo = $_POST['modelo'];
-                $bagones = $_POST['bagones'];
+                $vagones = $_POST['vagones'];
 
                 // Validación de datos
                 $msgErrModTren = '';
@@ -196,8 +196,8 @@
                 if ($modelo == '') {
                     $msgErrModTren .= 'Deberias introducir el modelo del tren!';
                 }
-                if ($bagones == '') {
-                    $msgErrModTren .= 'Deberias introducir la cantidad de bagones del tren!';
+                if ($vagones == '') {
+                    $msgErrModTren .= 'Deberias introducir la cantidad de vagones del tren!';
                 }
                 if ($msgErrModTren != '') {
                     return view('v_home', ['trenMod' => $tren,
@@ -226,7 +226,7 @@
                         }
 
                         // Actualizar
-                        $actualizado = $this->modeloTrenes->actualizarTren($num_serie, $capacidad, $modelo, $bagones, $nomImg);
+                        $actualizado = $this->modeloTrenes->actualizarTren($num_serie, $capacidad, $modelo, $vagones, $nomImg);
                         if ($actualizado) {
                             return view('v_home', ['trenMod' => $tren,
                                                     'msgInfoModTren' => 'Datos actualizados correctamente']);
@@ -237,7 +237,7 @@
                     } else {
                         // No se ha subido la imagen 'guardar el tren con imagen sinImg.png'
                         // Actualizar
-                        $actualizado = $this->modeloTrenes->actualizarTren($num_serie, $capacidad, $modelo, $bagones);
+                        $actualizado = $this->modeloTrenes->actualizarTren($num_serie, $capacidad, $modelo, $vagones);
                         if ($actualizado) {
                             return view('v_home', ['trenMod' => $tren,
                                                     'msgInfoModTren' => 'Datos actualizados correctamente']);

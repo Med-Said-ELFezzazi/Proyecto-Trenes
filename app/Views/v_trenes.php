@@ -28,83 +28,37 @@ if (isset($_POST['aniadirTren'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trenes</title>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Función cambia entre la vista de listar infos y añadir nuevo tren
-            function cambiarVista() {
-                let btnAniadirTren = document.getElementById('btnAniadirTren');
-                let textoBtn = btnAniadirTren.textContent;
+        document.addEventListener('DOMContentLoaded', function() {
 
-                if (textoBtn == 'Añadir nuevo tren') {
-                    document.getElementById('titulo-vista').textContent = 'Añadir nuevo tren';
-                    btnAniadirTren.textContent = 'Listar datos';
-                    document.getElementById('trenInfo').classList.add('d-none');
-                    document.getElementById('nuevoTrenForm').classList.remove('d-none');
-                } else {
-                    document.getElementById('titulo-vista').textContent = 'Información de trenes';
-                    btnAniadirTren.textContent = 'Añadir nuevo tren';
-                    document.getElementById('nuevoTrenForm').classList.add('d-none');
-                    document.getElementById('trenInfo').classList.remove('d-none');
-                }
-            }
-
+        // Función cambia entre la vista de listar infos y añadir nuevo tren
+        function cambiarVista() {
+            // Obtener el texto del button Añadir nuevo tren
             let btnAniadirTren = document.getElementById('btnAniadirTren');
-            btnAniadirTren.addEventListener('click', cambiarVista);
+            let textoBtn = btnAniadirTren.textContent;
 
-            // Funcionalidad de editar y guardar
-            document.querySelectorAll('.btn-editar').forEach(function (btnEditar) {
-                btnEditar.addEventListener('click', function () {
-                    const fila = this.closest('tr');
-                    const form = fila.querySelector('.tren-form');
-                    const editando = fila.classList.contains('editando');
+            if (textoBtn == 'Añadir nuevo tren') {
+                // Cambio del texto titulo
+                document.getElementById('titulo-vista').textContent = 'Añadir nuevo tren';
+                // Cambio el texto del button
+                btnAniadirTren.textContent = 'Listar datos';
+                // Cambio la vista al form
+                document.getElementById('trenInfo').classList.add('d-none');
+                document.getElementById('nuevoTrenForm').classList.remove('d-none');
+            } else {
+                // Cambio del texto titulo
+                document.getElementById('titulo-vista').textContent = 'Información de trenes';
+                // Cambio el texto del button
+                btnAniadirTren.textContent = 'Añadir nuevo tren';
+                // Cambio la vista a la info
+                document.getElementById('nuevoTrenForm').classList.add('d-none');
+                document.getElementById('trenInfo').classList.remove('d-none');
+            }
+        }
 
-                    if (!editando) {
-                        fila.querySelectorAll('[data-field]').forEach(function (campo) {
-                            const nomInput = campo.getAttribute('data-field');
-                            const tipo = nomInput === 'modelo' ? 'text' : 'number';
-                            const value = campo.textContent.trim();
-
-                            const input = document.createElement('input');
-                            input.type = tipo;
-                            input.name = nomInput;
-                            input.value = value;
-                            input.className = 'form-control';
-
-                            campo.innerHTML = '';
-                            campo.appendChild(input);
-                        });
-
-                        this.textContent = 'Guardar';
-                        fila.classList.add('editando');
-                    } else {
-                        const inputs = fila.querySelectorAll('input');
-                        let valido = true;
-
-                        inputs.forEach(function (input) {
-                            if (!input.value.trim()) {
-                                valido = false;
-                                alert(`El campo ${input.name} no puede estar vacío.`);
-                            }
-                        });
-
-                        if (valido) {
-                            inputs.forEach(function (input) {
-                                let hiddenInput = form.querySelector(`input[type="hidden"][name="${input.name}"]`);
-                                if (!hiddenInput) {
-                                    hiddenInput = document.createElement('input');
-                                    hiddenInput.type = 'hidden';
-                                    hiddenInput.name = input.name;
-                                    form.appendChild(hiddenInput);
-                                }
-                                hiddenInput.value = input.value;
-                            });
-
-                            this.setAttribute('name', 'btnModificar');
-                            form.submit();
-                        }
-                    }
-                });
-            });
+        let btnAniadirTren = document.getElementById('btnAniadirTren');
+        btnAniadirTren.addEventListener('click', cambiarVista);
         });
+
     </script>
 
 </head>
@@ -136,12 +90,6 @@ if (isset($_POST['aniadirTren'])) {
                 echo '</div>';
             }
         }
-
-        if (isset($_POST['btnModificar'])) {
-            echo $mod;
-        }
-        // var_dump($_POST); // Muestra los datos enviados por el formulario
-
         ?>
 
         <!-- Tabla de infos de trenes -->
@@ -151,8 +99,9 @@ if (isset($_POST['aniadirTren'])) {
                     <tr>
                         <th>Imagen</th>
                         <th>num_serie</th>
-                        <th>Capacidad</th>
                         <th>Modelo</th>
+                        <th>vagones</th>
+                        <th>Capacidad</th>
                         <th colspan="2">Acción</th>
                     </tr>
                 </thead>
@@ -165,18 +114,19 @@ if (isset($_POST['aniadirTren'])) {
                             </td>
                             <?= form_open(current_url('/mod'), ['method' => 'post', 'class' => 'tren-form']) ?>
                             <td><?= $tren->num_serie; ?></td>
-                            <td data-field="capacidad"><?= $tren->capacidad; ?></td>
                             <td data-field="modelo"><?= $tren->modelo; ?></td>
-                            <td>
-                                <button type="button" class="btn btn-warning btn-sm btn-editar">Editar</button>
-                            </td>
+                            <td data-field="vagones"><?= $tren->vagones; ?></td>
+                            <td data-field="capacidad"><?= $tren->capacidad; ?></td>
                             <td>
                                 <!-- Borrar -->
                                 <?= form_hidden('capacidad', $tren->capacidad); ?>
                                 <?= form_hidden('modelo', $tren->modelo); ?>
-
-
                                 <?= form_hidden('numSerie', $tren->num_serie); ?>
+
+                                <a href="<?php echo current_url() . '/mod/' . $tren->num_serie; ?>" class="btn btn-warning">Editar</a>                               
+                            </td>
+
+                            <td>
                                 <?= form_input([
                                     'name' => 'borrarTren',
                                     'type' => 'submit',
@@ -220,19 +170,6 @@ if (isset($_POST['aniadirTren'])) {
                 ?>
             </div>
             <div class="form-group">
-                <label for="capacidad">Capacidad</label>
-                <?php
-                echo form_input([
-                    'type' => 'number',
-                    'name' => 'capacidad',
-                    'id' => 'capacidad',
-                    'class' => 'form-control',
-                    'min' => 5,
-                    'required' => 'required'
-                ]);
-                ?>
-            </div>
-            <div class="form-group">
                 <label for="modelo">Modelo</label>
                 <?php
                 echo form_input([
@@ -245,13 +182,26 @@ if (isset($_POST['aniadirTren'])) {
                 ?>
             </div>
             <div class="form-group">
-                <label for="bagon">Bagones</label>
+                <label for="vagon">vagones</label>
                 <?php
                 echo form_input([
                     'type' => 'text',
-                    'name' => 'bagones',
-                    'id' => 'bagones',
+                    'name' => 'vagones',
+                    'id' => 'vagones',
                     'class' => 'form-control',
+                    'required' => 'required'
+                ]);
+                ?>
+            </div>
+            <div class="form-group">
+                <label for="capacidad">Capacidad</label>
+                <?php
+                echo form_input([
+                    'type' => 'number',
+                    'name' => 'capacidad',
+                    'id' => 'capacidad',
+                    'class' => 'form-control',
+                    'min' => 5,
                     'required' => 'required'
                 ]);
                 ?>
