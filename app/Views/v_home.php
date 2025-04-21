@@ -22,7 +22,7 @@
                     'v_modTrens' => isset($trenMod),
                     'v_averias' => isset($datosAverias) || isset($datosFiltrados),
                     'v_modAveria' => isset($averia),
-                    'v_altaAveria' => isset($matriculas),
+                    'v_altaAveria' => isset($numsSeries),
                     'v_rutas' => isset($datosRutas) || isset($datosFiltradosRutas),
                     'v_modRuta' => isset($rutaAmodificar),
                     'v_altaRuta' => isset($matriculasPaRutas),

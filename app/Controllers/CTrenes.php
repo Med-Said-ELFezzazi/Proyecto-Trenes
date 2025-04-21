@@ -28,7 +28,7 @@
             return false;
         }
 
-        // Función que compruebe si una matricula ya existe en BD o no
+        // Función que compruebe si un num_serie ya existe en BD o no
         public function numSerieYaExiste($num_serie)
         {
             $matriculaExiste = $this->modeloTrenes->capacidadTren($num_serie);
@@ -138,7 +138,7 @@
                     ]);
                 }
                 if ($trenYaEnUso) {
-                    // obtener id_rutas de la matricula
+                    // obtener id_rutas del num_serie
                     $idRutas = $this->modeloRutas->dameRutasTren($num_serie);
                     $rutasStr = '';
                     foreach ($idRutas as $ruta) {
@@ -176,7 +176,7 @@
 
 
 
-        // Función que actualiza datos de un tren pasando su matricula
+        // Función que actualiza datos de un tren pasando su num_serie
         public function modificarTren($num_serie) {
             $tren = $this->modeloTrenes->dameDatosTren($num_serie);
               
