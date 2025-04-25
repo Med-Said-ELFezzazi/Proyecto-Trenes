@@ -9,7 +9,7 @@
 
     protected $useAutoIncrement = true;
 
-    protected $returnType     = 'object';   // Array de obj, como se le pasan o devuelve las filas de la tabla
+    protected $returnType     = 'object';
     protected $useSoftDeletes = false;
 
     protected $allowedFields = ['num_serie', 'origen', 'destino', 'hora_salida', 'hora_llegada', 'tarifa', 'fecha'];
@@ -34,10 +34,18 @@
         return $ciudadesDes;
     }
 
+    // Obtener destinos disponibles dependiendo del origen seleccionado
+    public function destinosPorOrigen($origen) {
+        return $this->select('destino')
+                    ->where('origen', $origen)
+                    ->groupBy('destino')
+                    ->findAll();
+    }
+
     // Obtener datos de rutas con datos seleccionados
     public function datosRutas($hora_salida, $ciudad_origin, $ciudad_destino) {
         $datosRutas = $this
-            ->where('hora_salida', $hora_salida)
+            ->where('fecha', $hora_salida)
             ->where('origen', $ciudad_origin)
             ->where('destino', $ciudad_destino)
             ->orderBy('hora_salida', 'ASC')

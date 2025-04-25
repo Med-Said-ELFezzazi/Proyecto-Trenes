@@ -100,7 +100,7 @@ if (isset($_POST['aniadirTren'])) {
                         <th>Imagen</th>
                         <th>num_serie</th>
                         <th>Modelo</th>
-                        <th>vagones</th>
+                        <th>Vagones</th>
                         <th>Capacidad</th>
                         <th colspan="2">Acción</th>
                     </tr>

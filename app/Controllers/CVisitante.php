@@ -18,16 +18,40 @@ class CVisitante extends BaseController {
 
     public function lineasHorarios() {
         $ciudadesOrg = $this->modeloRutas->ciudadesOrg();
-        $ciudadesDes = $this->modeloRutas->ciudadesDes();
+        
         // Obtener datos de rutas
-        $fechaSeleccionada = $_POST['fecha'] ?? date('Y-m-d');
-        $ciudadOrgSel = $_POST['origenSel'] ?? '';
-        $ciudadDesSel = $_POST['destinoSel'] ?? '';
-        $datosRutas = $this->modeloRutas->datosRutas($fechaSeleccionada, $ciudadOrgSel, $ciudadDesSel);
+        $fechaSeleccionada = $this->request->getPost('fecha') ?? date('Y-m-d');
+        $ciudadOrgSel = $this->request->getPost('origenSel') ?? '';
+        $ciudadDesSel = $this->request->getPost('destinoSel') ?? '';
+
+        $destinosPorOrigen = [];
+        $datosRutas = [];
+        $msgError = '';
+
+        if (!empty($ciudadOrgSel) && $ciudadOrgSel !== '0'){
+            $destinosPorOrigen = $this->modeloRutas->destinosPorOrigen($ciudadOrgSel);
+        }
+
+        if ($this->request->getPost('consultar')) {
+            if ($ciudadOrgSel == '0' || $ciudadOrgSel == '') {
+                $msgError .= "Seleccione ciudad de origen!<br>";
+            }
+            if ($ciudadDesSel == '0' || $ciudadDesSel == '') {
+                $msgError .= "Seleccione ciudad de destino!<br>";
+            }
+            if (empty($msgError)){
+                $datosRutas = $this->modeloRutas->datosRutas($fechaSeleccionada, $ciudadOrgSel, $ciudadDesSel);
+            }
+        }
+
         return view('v_visitante', [
             'ciudadesOrg' => $ciudadesOrg,
-            'ciudadesDes' => $ciudadesDes,
-            'datosRutas' => $datosRutas
+            'datosRutas' => $datosRutas,
+            'destinosPorOrigen' => $destinosPorOrigen,
+            'msgError' => $msgError,
+            'fechaSeleccionada' => $fechaSeleccionada,
+            'ciudadOrgSel' => $ciudadOrgSel,
+            'ciudadDesSel' => $ciudadDesSel
         ]);
     }
 
@@ -36,4 +60,5 @@ class CVisitante extends BaseController {
         $datosTarifas = $this->modeloRutas->datosTarifas();
         return view('v_visitante', ['datosTarifas' => $datosTarifas]);
     }
+
 }

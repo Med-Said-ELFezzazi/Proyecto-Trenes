@@ -51,9 +51,9 @@ $routes->match(['GET', 'POST'], '/admin/averias/modificar/(:num)', 'CAverias::mo
 
 
 // Gestion de rutas
-$routes->match(['GET', 'POST'], '/admin/rutas', 'CRutas::gestionRutas');
+$routes->match(['GET', 'POST'], '/admin/rutas', 'CAdmin::gestionRutas');
 // Modificar ruta
-$routes->match(['GET', 'POST'], '/admin/rutas/modificar/(:num)', 'CRutas::modificarRuta/$1');
+$routes->match(['GET', 'POST'], '/admin/rutas/modificar/(:num)', 'CAdmin::modificarRuta/$1');
 
 
 
