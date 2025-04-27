@@ -1,3 +1,8 @@
+
+<?= $this->section("title") ?>
+    Lista de averías
+<?= $this->endSection(); ?>
+
 <div class="row">
     <!-- Filtros -->
     <h1 class="text-center">Lista de averías</h1>
@@ -49,7 +54,7 @@
                             'type' => 'text',
                             'name' => 'numSerieAveria',
                             'value' => $numSerieSel,
-                            'placeholder' => 'Inserta la matrícula'
+                            'class' => 'form-control'
                         ]);
                     ?>
                 </p>
@@ -61,7 +66,8 @@
                         echo form_input([
                             'type' => 'date',
                             'name' => 'fechaAveria',
-                            'value' => $fechaSel
+                            'value' => $fechaSel,
+                            'class' => 'form-control'
                         ]);
                     ?>
                 </p>
@@ -77,7 +83,8 @@
                             'min' => '0',
                             'value' => $costeMinSel,
                             'placeholder' => 'Mín',
-                            'style' => 'display: inline-block; width: 45%;'
+                            'style' => 'display: inline-block; width: 45%;',
+                            'class' => 'form-control'
                         ]);
                         echo '<b style="color: white;"> - </b>';
                         echo form_input([
@@ -86,7 +93,8 @@
                             'min' => '0',
                             'value' => $costeMaxSel,
                             'placeholder' => 'Máx',
-                            'style' => 'display: inline-block; width: 45%;'
+                            'style' => 'display: inline-block; width: 45%;',
+                            'class' => 'form-control'
                         ]);
                     ?>
                 </p>
@@ -136,7 +144,8 @@
                     <th>Fecha y hora</th>
                     <th>Coste</th>
                     <th>Reparada</th>
-                    <th>Acciones</th>
+                    <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -166,7 +175,8 @@
                                 echo '<td>';
                                     echo '<a href="' . site_url("/admin/averias/modificar/" . $averia->id_averia) . '" 
                                     class="btn btn-warning">Editar</a>';
-                                    echo '&ensp;';
+                                echo '</td>';
+                                echo '<td>';
                                     echo form_open(current_url(), ['method' => 'post']);
                                         echo form_hidden('id_averiaBorrar', $averia->id_averia);
                                         echo form_input([
@@ -202,7 +212,8 @@
                                 echo '<td>';
                                     echo '<a href="' . site_url("/admin/averias/modificar/" . $averia->id_averia) . '" 
                                         class="btn btn-warning">Editar</a>';
-                                        echo '&ensp;';
+                                echo '</td>';
+                                echo '<td>';
                                     echo form_open(current_url(), ['method' => 'post']);
                                         echo form_hidden('id_averiaBorrar', $averia->id_averia);
                                         echo form_input([

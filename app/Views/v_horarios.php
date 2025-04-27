@@ -1,7 +1,12 @@
-<div class="row">
+<?= $this->section("title") ?>
+    Consulta los horarios
+<?= $this->endSection(); ?>
+
+<div class="d-flex justify-content-between">
     <div class="col-md-3" style="background-color:rgb(13, 151, 244);">
         <div class="boxHorariosHome MT20">
-            <div class="contCampos">
+            <div class="contCampos" style="padding: 5px;">
+                <h2 style="color: white;" class="text-center">Filtro</h2>
                 <?php
                     echo form_open(current_url(), ['method' => 'post']);
                 ?>

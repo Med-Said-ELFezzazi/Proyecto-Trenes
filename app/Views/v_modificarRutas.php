@@ -1,5 +1,10 @@
 <?= $this->extend("plantillas/layout2zonas"); ?>
 
+
+<?= $this->section("title") ?>
+    Modificar ruta
+<?= $this->endSection(); ?>
+
 <?= $this->section("principal"); ?>
 
     <h1 class="text-center">Modificar Ruta</h1>
@@ -48,7 +53,7 @@
                     </td>
                     <td>
                         <?= form_input([
-                            'type' => 'time',
+                            'type' => 'datetime',
                             'name' => 'hora_salida',
                             'id' => 'hora_salida',
                             'value' => set_value('hora_salida', esc($ruta->hora_salida)),
@@ -57,7 +62,7 @@
                     </td>
                     <td>
                         <?= form_input([
-                            'type' => 'time',
+                            'type' => 'datetime',
                             'name' => 'hora_llegada',
                             'id' => 'hora_llegada',
                             'value' => set_value('hora_llegada', esc($ruta->hora_llegada)),

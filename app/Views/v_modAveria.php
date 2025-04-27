@@ -1,30 +1,7 @@
- <!DOCTYPE html>
- <html lang="en">
- <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modaveria</title>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const checkbox = document.querySelector('input[name="fechayhora_hoy"]');
-            const fecha = document.querySelector('input[name="fecha"]');
-            // Comprobar si el checkbox esta checkeado
-            if (checkbox.checked) {
-                // Deshabilitar
-                fecha.disabled = true;
-            }
-            // Añadir evento para cambiar el estado del campo fecha
-            checkbox.addEventListener('change', function() {
-                if (checkbox.checked) {
-                    fecha.disabled = true;
-                } else {
-                    fecha.disabled = false;
-                }
-            });
-        });
-    </script>
- </head>
- <body>
+<?= $this->section("title") ?>
+    Modificar datos de la averia
+<?= $this->endSection(); ?>
+
  <h1 class="text-center">Modificar datos averia</h1>
 
      <!-- Msj erro/confirmación -->

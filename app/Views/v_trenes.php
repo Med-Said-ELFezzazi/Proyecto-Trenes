@@ -20,8 +20,13 @@ if (isset($_POST['aniadirTren'])) {
 }
 
 ?>
+
+<?= $this->section("title") ?>
+    Información de trenes
+<?= $this->endSection(); ?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -98,11 +103,12 @@ if (isset($_POST['aniadirTren'])) {
                 <thead>
                     <tr>
                         <th>Imagen</th>
-                        <th>num_serie</th>
+                        <th>Numero de serie</th>
                         <th>Modelo</th>
                         <th>Vagones</th>
                         <th>Capacidad</th>
-                        <th colspan="2">Acción</th>
+                        <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -125,7 +131,6 @@ if (isset($_POST['aniadirTren'])) {
 
                                 <a href="<?php echo current_url() . '/mod/' . $tren->num_serie; ?>" class="btn btn-warning">Editar</a>                               
                             </td>
-
                             <td>
                                 <?= form_input([
                                     'name' => 'borrarTren',
@@ -147,7 +152,7 @@ if (isset($_POST['aniadirTren'])) {
             <h3 class="text-center text-success">Rellena los siguientes datos</h3>
             <?= form_open(site_url('/admin/trenes'), ['method' => 'post', 'enctype' => 'multipart/form-data']) ?>
             <div class="form-group">
-                <label for="imagen">Imagen</label>
+                <label for="imagen">Imagen:</label>
                 <?php
                 echo form_upload([
                     'name' => 'imagen',
@@ -158,7 +163,7 @@ if (isset($_POST['aniadirTren'])) {
                 ?>
             </div>
             <div class="form-group">
-                <label for="numSerie">Num_serie</label>
+                <label for="numSerie">Numero de serie:</label>
                 <?php
                 echo form_input([
                     'type' => 'text',
@@ -170,7 +175,7 @@ if (isset($_POST['aniadirTren'])) {
                 ?>
             </div>
             <div class="form-group">
-                <label for="modelo">Modelo</label>
+                <label for="modelo">Modelo:</label>
                 <?php
                 echo form_input([
                     'type' => 'text',
@@ -182,7 +187,7 @@ if (isset($_POST['aniadirTren'])) {
                 ?>
             </div>
             <div class="form-group">
-                <label for="vagon">vagones</label>
+                <label for="vagon">Vagones:</label>
                 <?php
                 echo form_input([
                     'type' => 'text',
@@ -194,7 +199,7 @@ if (isset($_POST['aniadirTren'])) {
                 ?>
             </div>
             <div class="form-group">
-                <label for="capacidad">Capacidad</label>
+                <label for="capacidad">Capacidad:</label>
                 <?php
                 echo form_input([
                     'type' => 'number',

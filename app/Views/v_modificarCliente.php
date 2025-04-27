@@ -1,18 +1,12 @@
 <?= $this->extend("plantillas/layout2zonas"); ?>
 
+
+<?= $this->section("title") ?>
+    Modificar datos personales
+<?= $this->endSection(); ?>
+
 <?= $this->section("principal"); ?>
 
-    <!DOCTYPE html>
-    <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Modificar datos</title>
-            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-            <link rel="stylesheet" href="<?= base_url('css/styleAut.css'); ?>">
-        </head>
-        <body>
             <!-- Mostrar msg info -->                
             <?php if ($msg != ""): ?>
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
