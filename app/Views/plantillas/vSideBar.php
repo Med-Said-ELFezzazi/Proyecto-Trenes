@@ -15,6 +15,11 @@
                 <a href="<?= site_url('/modificarCliente'); ?>"><span class="fa fa-edit"></span> Modificar datos personales</a>
             </li>
 
+            <!-- Reservas del cliente -->
+            <li>
+                <a href="<?= site_url('/misViajes'); ?>"><span class="fa fa-ticket-alt"></span> Mis viajes</a>
+            </li>
+
             <!-- El cierre de la session -->
             <li><!-- luego class de 'a' class="btn btn-danger" -->
                 <a href="<?= site_url('/cerrarSession'); ?>"><span class="fa fa-sign-out-alt "></span>Cerrar sesión</a>

@@ -354,6 +354,59 @@
         }
 
       
+        // Función que obtiene todas las reservas que haya hecho el cliente logueado 
+        public function getReservasCli() {
+            $dniCli = session()->get('dniCliente');
+            if ($dniCli == null) {
+                return redirect()->to('/autenticacion');
+            }
+
+            $datosReservas = $this->modeloReservas
+                ->where('dni', $dniCli)
+                ->findAll();
+
+            // lo que necesito -> id_ticket, num_Asiento, ciudadorg, ciudaddes, fecha de viaje 'fecha'
+            $datos = [];
+            if (count($datosReservas) > 0) {
+                foreach ($datosReservas as $reserva) {
+                    $datosRuta = $this->modeloRutas
+                                ->where('id_ruta', $reserva->id_ruta)
+                                ->first();
+                    $datos[] = [
+                        'reserva' => $reserva,
+                        'ruta' => $datosRuta
+                    ];
+                }
+            }
+
+           // Separar en dos arrays: futuras y pasadas
+            $hoy = strtotime(date('Y-m-d'));
+            $futuras = [];
+            $pasadas = [];
+
+            foreach ($datos as $dato) {
+                $fechaViaje = strtotime($dato['ruta']->fecha);
+                if ($fechaViaje >= $hoy) {
+                    $futuras[] = $dato;
+                } else {
+                    $pasadas[] = $dato;
+                }
+            }
+
+            // Ordenar cada grupo por fecha (ascendente)
+            usort($futuras, function ($a, $b) {
+                return strtotime($a['ruta']->fecha) - strtotime($b['ruta']->fecha);
+            });
+
+            usort($pasadas, function ($a, $b) {
+                return strtotime($a['ruta']->fecha) - strtotime($b['ruta']->fecha);
+            });
+
+            // Unir primero futuras, luego pasadas
+            $datosOrdenados = array_merge($futuras, $pasadas);
+
+            return view("v_viajes", ['datos' => $datosOrdenados]);
+        }
     } 
 
 
