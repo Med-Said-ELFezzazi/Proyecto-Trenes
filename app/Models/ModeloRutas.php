@@ -35,14 +35,14 @@
     }
 
     // Obtener datos de rutas con datos seleccionados
-    public function datosRutas($hora_salida, $ciudad_origin, $ciudad_destino) {
-        $datosRutas = $this
-            ->where('hora_salida', $hora_salida)
+    public function datosRutas($fecha, $ciudad_origin, $ciudad_destino) {
+        $rutas = $this
+            ->like('hora_salida', $fecha, 'after')
             ->where('origen', $ciudad_origin)
             ->where('destino', $ciudad_destino)
             ->orderBy('hora_salida', 'ASC')
             ->findAll();
-        return $datosRutas;
+        return $rutas;
     }
     
     // Obtener datos de tarifas segund ciudad origen
@@ -207,5 +207,31 @@
     }
 
     
+    public function destinosPorOrigen($origen) {
+        $builder = $this->db->table('rutas');
+        $builder->select('destino');
+        $builder->where('origen', $origen);
+        $builder->groupBy('destino');
+        $query = $builder->get();
     
+        $destinos = [];
+        foreach ($query->getResult() as $row) {
+            $destinos[] = $row->destino;
+        }
+        return $destinos;
+    }
+    
+    public function rutasPosteriores($origen, $destino, $fecha){
+    return $this->where('origen', $origen)
+                ->where('destino', $destino)
+                ->where('hora_salida >', $fecha)
+                ->orderBy('hora_salida', 'ASC')
+                ->findAll();
+    }
+
+    public function getPrecioRuta($idRuta)
+    {
+        $ruta = $this->find($idRuta);
+        return $ruta ? $ruta->tarifa : null;
+    }
 }

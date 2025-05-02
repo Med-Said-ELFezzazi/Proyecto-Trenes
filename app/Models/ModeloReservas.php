@@ -66,8 +66,7 @@
 
     // Función que inserta una reserva Y DEVUELVE true o false
     public function agregarReserva($dni, $id_ruta, $arrAsientos) {
-        $this->db->transStart();
-    
+        // Quitar transacción interna (ya manejada por realizarCompra)
         foreach ($arrAsientos as $asiento) {
             $this->insert([
                 'dni' => $dni,
@@ -76,11 +75,9 @@
                 'fecha_reserva' => date('Y-m-d H:i:s')
             ]);
         }
-    
-        $this->db->transComplete();
-    
-        return $this->db->transStatus();
+        return true; // Siempre retorna éxito, el error se maneza con transStatus()
     }
+    
     
 
     // Función que obtiene idTicket/num_asiento de una reserva    
@@ -159,6 +156,17 @@
         return $this->where('id_ruta', $id_ruta)
                     ->where('num_asiento', $num_asiento)
                     ->countAllResults() > 0;
+    }
+
+    public function asientosOcupados($id_ruta)
+    {
+        // Devuelve un array con los números de asiento ya reservados para esa ruta
+        $query = $this->select('num_asiento')
+                      ->where('id_ruta', $id_ruta)
+                      ->findAll();
+    
+        // Extrae solo los números
+        return array_column($query, 'num_asiento');
     }
 
 

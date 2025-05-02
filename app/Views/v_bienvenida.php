@@ -1,3 +1,16 @@
+<?php if (session()->has('compraOk') && session('compraOk')): ?>
+    <div class="alert alert-success">
+        <h4>¡Compra realizada con éxito!</h4>
+        <p>Se han comprado <?= session('numTickets') ?? 1 ?> billete(s)</p>
+        <?php if (session()->has('emailOk') && session('emailOk')): ?>
+            <p>Se ha enviado el email de confirmación a tu correo</p>
+        <?php else: ?>
+            <p class="text-warning">No se pudo enviar el email de confirmación</p>
+        <?php endif; ?>
+    </div>
+<?php endif; ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
     <head>

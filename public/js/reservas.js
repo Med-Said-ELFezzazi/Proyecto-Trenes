@@ -10,27 +10,30 @@ function toggleFechaVuelta() {
     }
 }
 
-// Función que habilita/des el campo asiento según el estado del checkbox
-function toggleNumAsiento() {
-    const checkbox = document.getElementById('asientoAleatorio');
-    const inputAsiento = document.getElementById('asiento');
+document.addEventListener('DOMContentLoaded', function () {
+    console.log("Cargando js");
+    const fechaIda = document.getElementById('fecha_ida');
+    const fechaVuelta = document.getElementById('fecha_vuelta');
 
-    if (checkbox.checked) {
-        // asiento.style.visibility = 'hidden'; // Ocultar
-        inputAsiento.disabled = true;
-    } else {
-        // asiento.style.visibility = ''; // Mostrar
-        inputAsiento.disabled = false;
+    if (fechaIda && fechaVuelta) {
+        // Al cargar, establece el mínimo de fecha de vuelta según la de ida
+        fechaVuelta.min = fechaIda.value;
+
+        // Cuando cambia la fecha de ida, actualiza el mínimo de fecha de vuelta
+        fechaIda.addEventListener('change', function () {
+            fechaVuelta.min = fechaIda.value;
+            // Si la fecha de vuelta es anterior a la de ida, la borra
+            if (fechaVuelta.value && fechaVuelta.value < fechaIda.value) {
+                fechaVuelta.value = '';
+            }
+        });
     }
-}
+});
+
 
 // Ejecutar al cargar la página
 document.addEventListener('DOMContentLoaded', function () {
     const checkbox = document.getElementById('soloIda');
     checkbox.addEventListener('change', toggleFechaVuelta);
     toggleFechaVuelta();
-
-    const checkbox2 = document.getElementById('asientoAleatorio');
-    checkbox2.addEventListener('change', toggleNumAsiento);
-    toggleNumAsiento();
 });
