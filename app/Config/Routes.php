@@ -60,3 +60,6 @@ $routes->match(['GET', 'POST'], '/admin/rutas/aniadirRuta', 'CAdmin::aniadirRuta
 $routes->get('/opinion', 'CReserva::opinar');
 // Insertar opinión
 $routes->post('/opinion/add' , 'CReserva::insertarOpinion');
+
+// Mis viajes
+$routes->get('/misViajes', 'CReserva::getReservasCli');
