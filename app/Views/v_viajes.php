@@ -44,99 +44,88 @@
         <?php 
             if (count($datos) == 0) {
                 echo "<h1 style='display:flex; justify-content:center;'>Todavía no tienes reservas</h1>";
-            } else {        
-        ?>
-            <div class="container auth-container">
-                
-                <?php
-                    if (count($datos) == 0) {
-                    }
-                    $tituloProxMostrado = false;                          
-                    $tituloAnteMostrado = false;                          
-                    foreach($datos as $item) {
-                        $reserva = $item['reserva'];
-                        $ruta = $item['ruta'];
-                        
-                        $imagenCiudadDes = obtenerImagenUnsplash($ruta->destino, $accessKey);
+            } else {            
+                $agrupadoPorRuta = [];      // Agrupar todas las reservas por ruta => Ruta->reserva1, reserva2, reserva7
+
+                foreach ($datos as $item) {
+                    $reserva = $item['reserva'];
+                    $ruta = $item['ruta'];
                     
-                        // comprobar la fecha de reserva para clasificarla 'proxima/anterior'
-                        if ($ruta->fecha > date('Y-m-d') || ($ruta->fecha == date('Y-m-d') && $ruta->hora_salida > date('H:i:s'))) {
-                            if (!$tituloProxMostrado) {
-                                echo "<h1 style='display:flex; justify-content:center;'>Aquí están tus próximas reservas</h1>";
-                                $tituloProxMostrado = true;
-                            }
-                ?>
-                    <div class="card mb-3" style="border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-                        <div class="card-body d-flex align-items-center justify-content-between" style="background-color:rgb(74, 233, 114);">
-                            <img src="<?= $imagenCiudadDes ?>" 
-                                alt="Imagen de <?= $ruta->destino ?>" 
-                                style="width: 35%; height: 120px; border-radius: 6px; object-fit: cover;" 
-                                loading="lazy">
+                    $claveRuta = $ruta->id_ruta;
 
-                            <div class="text-center mx-3">
-                                <h4 class="card-title mb-2"><?= $ruta->origen ?> a <?= $ruta->destino ?></h4>
-                                <p class="card-text mb-0">
-                                    📅 <?= date('d F', strtotime($ruta->fecha)) ?>
-                                    <span style="margin: 0 10px; color: #ccc;">|</span>
-                                    <strong> Número de reserva: </strong><?= $reserva->id_ticket?>
-                                </p>
-                                <div class="collapse" id="detalle<?= $reserva->id_ticket ?>">
-                                    <strong>Asiento: </strong><?= $reserva->num_asiento?>
-                                    <br>
-                                    <strong>Hora de salida: </strong><?= date('H:i', strtotime($ruta->hora_salida))?>
-                                    <strong>Hora de llegada: </strong><?= date('H:i', strtotime($ruta->hora_llegada))?>
-                                    <br>
-                                    <strong>Precio: </strong><?= $ruta->tarifa?>€
-                                </div>
-                            </div>
-                            <button class="btn btn-primary float-end" data-bs-toggle="collapse" data-bs-target="#detalle<?= $reserva->id_ticket ?>">
-                                Ver detalles <i class="fas fa-chevron-down"></i>
-                            </button>
-                        </div>
-                    </div>    
+                    if (!isset($agrupadoPorRuta[$claveRuta])) {
+                        $agrupadoPorRuta[$claveRuta] = [
+                            'ruta' => $ruta,
+                            'reservas' => []
+                        ];
+                    }
+                    $agrupadoPorRuta[$claveRuta]['reservas'][] = $reserva;
+                }
 
-                <?php } else {
+
+                $tituloProxMostrado = false;
+                $tituloAnteMostrado = false;
+
+                foreach ($agrupadoPorRuta as $grupo) {
+                    $ruta = $grupo['ruta'];
+                    $reservas = $grupo['reservas'];
+
+                    $imagenCiudadDes = obtenerImagenUnsplash($ruta->destino, $accessKey);
+
+                    $esProxima = ($ruta->fecha > date('Y-m-d')) || ($ruta->fecha == date('Y-m-d') && $ruta->hora_salida > date('H:i:s'));
+
+                    if ($esProxima) {
+                        if (!$tituloProxMostrado) {
+                            echo "<h1 style='display:flex; justify-content:center;'>Aquí están tus próximas reservas</h1>";
+                            $tituloProxMostrado = true;
+                        }
+                    } else {
                         if (!$tituloAnteMostrado) {
                             echo "<h1 style='display:flex; justify-content:center;'>Sus reservas anteriores</h1>";
                             $tituloAnteMostrado = true;
                         }
-                    ?>
+                    }
 
-                    <div class="card mb-3" style="border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-                        <div class="card-body d-flex align-items-center justify-content-between" style="background-color:rgb(241, 154, 154);">
+                // Mostrar la tarjeta para esta ruta
+                ?>
+                <div class="card mb-3" style="border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                    <div class="card-body d-flex align-items-center justify-content-between" style="background-color: <?= $esProxima ? 'rgb(173, 216, 230)' : 'rgb(241, 154, 154)' ?>;">
+                        <img src="<?= $imagenCiudadDes ?>" 
+                            alt="Imagen de <?= $ruta->destino ?>" 
+                            style="width: 35%; height: 120px; border-radius: 6px; object-fit: cover;" 
+                            loading="lazy">
 
-                            <img src="<?= $imagenCiudadDes ?>" 
-                                alt="Imagen de <?= $ruta->destino ?>" 
-                                style="width: 35%; height: 120px; border-radius: 6px; object-fit: cover;" 
-                                loading="lazy">
+                        <div class="text-center mx-3">
+                            <h4 class="card-title mb-2"><?= $ruta->origen ?> a <?= $ruta->destino ?></h4>
+                            <p class="card-text mb-0">
+                                📅 <?= date('d F', strtotime($ruta->fecha)) ?>
+                                <span style="margin: 0 10px; color: #ccc;">|</span>
+                                <strong>Reserva(s): </strong>
+                                <?php
+                                    $ids = array_map(fn($r) => $r->id_ticket, $reservas);
+                                    echo implode(', ', $ids);
+                                ?>
+                            </p>
 
-                            <div class="text-center mx-3">
-                                <h4 class="card-title mb-2"><?= $ruta->origen ?> a <?= $ruta->destino ?></h4>
-                                <p class="card-text mb-0">
-                                    📅 <?= date('d F', strtotime($ruta->fecha)) ?>
-                                    <span style="margin: 0 10px; color: #ccc;">|</span>
-                                    <strong>Número de reserva:</strong> <?= $reserva->id_ticket ?>
-                                </p>
-                                <div class="collapse" id="detalle<?= $reserva->id_ticket ?>">
-                                    <strong>Asiento: </strong><?= $reserva->num_asiento?>
-                                    <br>
-                                    <strong>Hora de salida: </strong><?= date('H:i', strtotime($ruta->hora_salida))?>
-                                    <strong>Hora de llegada: </strong><?= date('H:i', strtotime($ruta->hora_llegada))?>
-                                    <br>
-                                    <strong>Precio: </strong><?= $ruta->tarifa?>€
-                                </div>
+                            <div class="collapse" id="detalle<?= $ruta->id_ruta ?>">
+                                <strong>Asiento(s): </strong>
+                                <?php
+                                    $asientos = array_map(fn($r) => $r->num_asiento, $reservas);
+                                    echo implode(', ', $asientos);
+                                ?>
+                                <br>
+                                <strong>Hora de salida: </strong><?= date('H:i', strtotime($ruta->hora_salida)) ?>
+                                <strong>Hora de llegada: </strong><?= date('H:i', strtotime($ruta->hora_llegada)) ?>
+                                <br>
+                                <strong>Precio: </strong><?= $ruta->tarifa ?>€
                             </div>
-
-                            <button class="btn btn-primary float-end" data-bs-toggle="collapse" data-bs-target="#detalle<?= $reserva->id_ticket ?>">
-                                Ver detalles <i class="fas fa-chevron-down"></i>
-                            </button>                        
                         </div>
+                        <button class="btn btn-primary float-end" data-bs-toggle="collapse" data-bs-target="#detalle<?= $ruta->id_ruta ?>">
+                                Ver detalles <i class="fas fa-chevron-down"></i>
+                        </button> 
                     </div>
-
-                <?php }} ?>
-
-            </div>
-        <?php } ?>
+                </div>
+                <?php } }?>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
