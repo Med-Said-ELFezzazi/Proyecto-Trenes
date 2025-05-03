@@ -33,11 +33,15 @@
                         '/admin/averias' => 'Gestión averías',
                     ];
                 } else {
-                    // Visitante
-                    $links = [
-                        '/lineasHorarios' => 'Líneas y horarios',
-                        '/tarifas' => 'Tarifas',
-                    ];
+                     // Mostrar enlaces solo si el usuario está en la página /visitante
+                    if (strpos($currentUrl, '/visitante') !== false) {
+                        $links = [
+                            '/lineasHorarios' => 'Líneas y horarios',
+                            '/tarifas' => 'Tarifas',
+                        ];
+                    } else {
+                        $links = [];
+                    }
                 }
 
                 // Generar los enlaces de navegación

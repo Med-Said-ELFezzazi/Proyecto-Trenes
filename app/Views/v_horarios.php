@@ -3,7 +3,7 @@
 <?= $this->endSection(); ?>
 
 <div class="d-flex justify-content-between">
-    <div class="col-md-3" style="background-color:rgb(13, 151, 244);">
+    <div class="p-3 mr-5" style="background-color:rgb(13, 151, 244);">
         <div class="boxHorariosHome MT20">
             <div class="contCampos" style="padding: 5px;">
                 <h2 style="color: white;" class="text-center">Filtro</h2>
@@ -13,49 +13,40 @@
 
                 <!-- Fecha -->
                 <p>
-                    <h5 style="color: white;">Fecha</h5>
+                    <?= form_label('Fecha:', '', ['style' => 'color:white; font-size: 18px;']) ?>
                     <?php
-                        echo form_input([
-                            'type' => 'date',
-                            'name' => 'fecha',
-                            'id' => 'fecha',
-                            'value' => $fechaSeleccionada,
-                            'min' => date('Y-m-d'),
-                            'max' => date('Y-m-d', strtotime('+1 month')),
-                            'class' => 'form-control'
-                        ]);
+                        echo form_input(['type' => 'date', 'name' => 'fecha', 'id' => 'fecha', 'value' => $fechaSeleccionada, 'min' => date('Y-m-d'), 'max' => date('Y-m-d', strtotime('+1 month')), 'class' => 'form-control']);
                     ?>
                 </p>
                 
                 <!-- Origen -->
-                <h5 style="color: white;">Origen</h5>
-                <div class="custom-select">
+                <p>
+                    <?= form_label('Origen:', '', ['style' => 'color:white; font-size: 18px;']) ?>
                     <?php   
                         echo form_dropdown('origenSel',
                             ['0' => 'Seleccione origen'] + array_column($ciudadesOrg, 'origen', 'origen'),
                             $ciudadOrgSel,
-                            ['id' => 'origenSel', 'class' => 'select', 'onchange' => 'this.form.submit()']
+                            ['id' => 'origenSel', 'class' => 'form-control', 'onchange' => 'this.form.submit()']
                         );
                     ?> 
-                </div>
-                <br><br>
+                </p>
 
                 <!-- Destino -->
-                <h5 style="color: white;">Destino</h5>
-                <div class="custom-select">
+                <p>
+                    <?= form_label('Destino:', '', ['style' => 'color:white; font-size: 18px;']) ?>
                     <?php
                         echo form_dropdown('destinoSel', 
                             ['0' => 'Seleccione destino'] + array_column($destinosPorOrigen, 'destino', 'destino'), 
                             $ciudadDesSel, 
-                            ['id' => 'destinoSel', 'class' => 'select']
+                            ['id' => 'destinoSel', 'class' => 'form-control']
                         );
                     ?>
-                </div>
-                <br><br>
+                </p>
+                <br>
 
                 <?php
                     // Botón enviar
-                    echo form_submit('consultar', 'Consultar horarios', ['class' => 'btn btn-primary']);
+                    echo form_submit('consultar', 'Consultar horarios', ['class' => 'btn btn-light']);
                     echo form_close();
                 ?>
             </div>
@@ -63,7 +54,7 @@
     </div>
 
     <!-- Resultados -->
-    <div class="col-md-9">
+    <div class="">
         <?php if (!empty($msgError)): ?>
             <div class="mt-3 alert alert-danger">
                 <strong>ERROR:</strong><br><?= $msgError; ?>

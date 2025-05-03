@@ -3,19 +3,19 @@
 if (isset($_POST['aniadirTren'])) {
     if (isset($msgErrorTren)) {
         echo '<div class="alert alert-danger" role="alert">
-                            ' . $msgErrorTren . '
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"
-                        <span aria-hidden="true">&times;</span></button>
-                    </div>';
+                ' . $msgErrorTren . '
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"
+                <span aria-hidden="true">&times;</span></button>
+            </div>';
     }
 
     // msg de confirmación 'Añadir'
     if (isset($msgMatriExito)) {
         echo '<div class="alert alert-success" role="alert">
-                        ' . $msgMatriExito . '
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span></button>
-                    </div>';
+                ' . $msgMatriExito . '
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span></button>
+            </div>';
     }
 }
 
@@ -31,7 +31,6 @@ if (isset($_POST['aniadirTren'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trenes</title>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
 
@@ -83,7 +82,8 @@ if (isset($_POST['aniadirTren'])) {
                 echo '<div class="alert alert-success" role="alert">';
                 echo 'El tren ha sido eliminado correctamente';
                 echo '<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span></button>';
+                    <span aria-hidden="true">&times;</span>
+                </button>';
                 echo '</div>';
             }
             if (isset($msgErrorEliTren)) {
@@ -91,7 +91,8 @@ if (isset($_POST['aniadirTren'])) {
                 echo '<div class="alert alert-danger" role="alert">';
                 echo $msgErrorEliTren;
                 echo '<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span></button>';
+                    <span aria-hidden="true">&times;</span>
+                </button>';
                 echo '</div>';
             }
         }
@@ -115,14 +116,22 @@ if (isset($_POST['aniadirTren'])) {
                     <?php foreach ($datosTrenes as $tren): ?>
                         <tr data-num_serie="<?= $tren->num_serie; ?>">
                             <td>
-                                <?php $rutaImg = base_url('images/trenes/' . $tren->imagen); ?>
-                                <img src="<?= $rutaImg ?>" alt="Tren Image" class="img-fluid" style="width: 100px; height: auto;">
+                                <?php $rutaImg = base_url('/images/trenes/' . $tren->imagen); ?>
+                                <img src="<?= $rutaImg ?>" alt="Tren Image" class="img-fluid" style="width: 120px; height: auto;">
                             </td>
                             <?= form_open(current_url('/mod'), ['method' => 'post', 'class' => 'tren-form']) ?>
-                            <td><?= $tren->num_serie; ?></td>
-                            <td data-field="modelo"><?= $tren->modelo; ?></td>
-                            <td data-field="vagones"><?= $tren->vagones; ?></td>
-                            <td data-field="capacidad"><?= $tren->capacidad; ?></td>
+                            <td>
+                                <?= $tren->num_serie; ?>
+                            </td>
+                            <td data-field="modelo">
+                                <?= $tren->modelo; ?>
+                            </td>
+                            <td data-field="vagones">
+                                <?= $tren->vagones; ?>
+                            </td>
+                            <td data-field="capacidad">
+                                <?= $tren->capacidad; ?>
+                            </td>
                             <td>
                                 <!-- Borrar -->
                                 <?= form_hidden('capacidad', $tren->capacidad); ?>
@@ -132,12 +141,7 @@ if (isset($_POST['aniadirTren'])) {
                                 <a href="<?php echo current_url() . '/mod/' . $tren->num_serie; ?>" class="btn btn-warning">Editar</a>                               
                             </td>
                             <td>
-                                <?= form_input([
-                                    'name' => 'borrarTren',
-                                    'type' => 'submit',
-                                    'class' => 'btn btn-danger btn-sm',
-                                    'value' => 'Borrar'
-                                ]); ?>
+                                <?= form_input(['name' => 'borrarTren', 'type' => 'submit', 'class' => 'btn btn-danger btn-sm', 'value' => 'Borrar']); ?>
                             </td>
                             <?= form_close(); ?>
                         </tr>
@@ -151,73 +155,27 @@ if (isset($_POST['aniadirTren'])) {
         <div id="nuevoTrenForm" class="d-none">
             <h3 class="text-center text-success">Rellena los siguientes datos</h3>
             <?= form_open(site_url('/admin/trenes'), ['method' => 'post', 'enctype' => 'multipart/form-data']) ?>
-            <div class="form-group">
-                <label for="imagen">Imagen:</label>
-                <?php
-                echo form_upload([
-                    'name' => 'imagen',
-                    'class' => 'form-control',
-                    'accept' => '.jpg,.jpeg,.png,.gif'
-                ]);
-                // El accept solo da sugerencias en el html
-                ?>
-            </div>
-            <div class="form-group">
-                <label for="numSerie">Numero de serie:</label>
-                <?php
-                echo form_input([
-                    'type' => 'text',
-                    'name' => 'numSerie',
-                    'id' => 'numSerie',
-                    'class' => 'form-control',
-                    'required' => 'required'
-                ]);
-                ?>
-            </div>
-            <div class="form-group">
-                <label for="modelo">Modelo:</label>
-                <?php
-                echo form_input([
-                    'type' => 'text',
-                    'name' => 'modelo',
-                    'id' => 'modelo',
-                    'class' => 'form-control',
-                    'required' => 'required'
-                ]);
-                ?>
-            </div>
-            <div class="form-group">
-                <label for="vagon">Vagones:</label>
-                <?php
-                echo form_input([
-                    'type' => 'text',
-                    'name' => 'vagones',
-                    'id' => 'vagones',
-                    'class' => 'form-control',
-                    'required' => 'required'
-                ]);
-                ?>
-            </div>
-            <div class="form-group">
-                <label for="capacidad">Capacidad:</label>
-                <?php
-                echo form_input([
-                    'type' => 'number',
-                    'name' => 'capacidad',
-                    'id' => 'capacidad',
-                    'class' => 'form-control',
-                    'min' => 5,
-                    'required' => 'required'
-                ]);
-                ?>
-            </div>
-            <?= form_input([
-                'type' => 'submit',
-                'name' => 'aniadirTren',
-                'value' => 'Guardar datos',
-                'class' => 'btn btn-success'
-            ]) ?>
-
+                <div class="form-group">
+                    <label for="imagen">Imagen:</label>
+                    <?= form_upload(['name' => 'imagen', 'class' => 'form-control', 'accept' => '.jpg,.jpeg,.png,.gif']) ?>
+                </div>
+                <div class="form-group">
+                    <label for="numSerie">Numero de serie:</label>
+                    <?= form_input(['type' => 'text', 'name' => 'numSerie', 'id' => 'numSerie', 'class' => 'form-control', 'required' => 'required']) ?>
+                </div>
+                <div class="form-group">
+                    <label for="modelo">Modelo:</label>
+                    <?= form_input(['type' => 'text', 'name' => 'modelo', 'id' => 'modelo', 'class' => 'form-control', 'required' => 'required']) ?>
+                </div>
+                <div class="form-group">
+                    <label for="vagon">Vagones:</label>
+                    <?= form_input(['type' => 'text', 'name' => 'vagones', 'id' => 'vagones', 'class' => 'form-control', 'required' => 'required']) ?>
+                </div>
+                <div class="form-group">
+                    <label for="capacidad">Capacidad:</label>
+                    <?= form_input(['type' => 'number', 'name' => 'capacidad', 'id' => 'capacidad', 'class' => 'form-control', 'min' => 5, 'required' => 'required']) ?>
+                </div>
+                <?= form_input(['type' => 'submit', 'name' => 'aniadirTren', 'value' => 'Guardar datos', 'class' => 'btn btn-success']) ?>
             <?= form_close(); ?>
         </div>
     </div>
