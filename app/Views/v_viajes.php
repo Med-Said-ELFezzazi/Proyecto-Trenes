@@ -117,7 +117,7 @@
                                 <strong>Hora de salida: </strong><?= date('H:i', strtotime($ruta->hora_salida)) ?>
                                 <strong>Hora de llegada: </strong><?= date('H:i', strtotime($ruta->hora_llegada)) ?>
                                 <br>
-                                <strong>Precio: </strong><?= $ruta->tarifa ?>€
+                                <strong>Precio: </strong><?= $ruta->tarifa * count($asientos) ?>€
                             </div>
                         </div>
                         <button class="btn btn-primary float-end" data-bs-toggle="collapse" data-bs-target="#detalle<?= $ruta->id_ruta ?>">
