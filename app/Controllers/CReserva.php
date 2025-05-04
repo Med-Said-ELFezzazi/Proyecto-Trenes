@@ -181,7 +181,7 @@
         }      
         
         // Función que envía un correo al cliente con los detalles de la compra
-        public function enviarEmailCompra($emailCliente, $fechaIda, $horaSalidaIda, $origen, $destino, $arrTicketAsiento) {
+        public function enviarEmailCompra($emailCliente, $fechaIda, $horaSalidaIda, $origen, $destino, $arrTicketAsiento,$vuelta) {
             // Formatear la hora a H:i
             $horaSalidaIda = date('H:i', strtotime($horaSalidaIda));
         
@@ -199,6 +199,19 @@
             $idTicketsStr = implode(', ', $idTickets);
             $asientosStr = implode(', ', $asientos);
             $fechaIdaFormateada = $fechaIda->format('d-m-Y');
+
+            
+            if($vuelta){
+                $direccion="<tr>
+                    <td align='center' colspan='100'><b><i>VUELTA</i></b></td>
+                </tr>";
+            
+            }else{
+                $direccion="<tr>
+                    <td align='center' colspan='100'><b><i>IDA</i></b></td>
+                </tr>";
+            }
+                        
         
             // Cuerpo del mensaje
             $cuerpo = "<h1 style='color: green;'>Compra realizada correctamente</h1>
@@ -206,9 +219,7 @@
                 <div style='border: 2px dashed black; width: 450px; padding: 10px;'>
                     <table border='0' style='border-collapse: collapse; width: 100%;'>
                     <tbody>
-                        <tr>
-                            <td align='center' colspan='100'><b><i>IDA</i></b></td>
-                        </tr>
+                        {$direccion}
                         <tr>
                             <td>FECHA</td>
                             <td align='left'><b>{$fechaIdaFormateada}</b></td>
@@ -404,6 +415,7 @@
             //RUTAS VUELTA
             $id_ruta_vuelta=session()->get('idRutaVuelta');
             $datosRutaVuelta = $this->modeloRutas->dameDatosRuta($id_ruta_vuelta);
+            $fecha_vuelta= $this->formatearFecha($postData['fecha_vuelta']);
             //FECHA IDA, NUMBILLETES, ASIENTO ALETORIO
             $fechaIda = new DateTime($fecha_ida);
             $numBilletes = session()->get('Numbilletes');
@@ -460,7 +472,7 @@
             }
 
             // Registrar reserva ida
-            $reservaGrabada = $this->modeloReservas->agregarReserva(
+            $this->modeloReservas->agregarReserva(
                 session()->get('dniCliente'), 
                 $id_ruta_ida, 
                 $arrAsientosRandomIda
@@ -468,7 +480,7 @@
 
             if($id_ruta_vuelta!=null){
                 // Registrar reserva vuelta
-                $reservaGrabada = $this->modeloReservas->agregarReserva(
+                $this->modeloReservas->agregarReserva(
                     session()->get('dniCliente'), 
                     $id_ruta_vuelta, 
                     $arrAsientosRandomVuelta
@@ -476,7 +488,7 @@
             }
             // Enviar email
             $emailCliente = $this->modeloClientes->dameCliente(session()->get('dniCliente'))->email;
-            $arrNumTicket = $this->modeloReservas->dameIdTicket(session()->get('dniCliente'), $id_ruta_ida, date('Y-m-d'));
+            $arrNumTicket = $this->modeloReservas->dameIdTicket(session()->get('dniCliente'), $arrAsientosRandomIda, date('Y-m-d'));
             
             $emailEnviado = $this->enviarEmailCompra(
                 $emailCliente, 
@@ -484,8 +496,24 @@
                 $datosRutaIda->hora_salida, 
                 $datosRutaIda->origen, 
                 $datosRutaIda->destino,
-                $arrNumTicket
+                $arrNumTicket,
+                false
             );
+
+            if($id_ruta_vuelta!=null){
+                $emailCliente = $this->modeloClientes->dameCliente(session()->get('dniCliente'))->email;
+                $arrNumTicket = $this->modeloReservas->dameIdTicket(session()->get('dniCliente'), $id_ruta_vuelta, date('Y-m-d'));
+                $fechaVuelta = new DateTime($fecha_vuelta);
+                $emailEnviado = $this->enviarEmailCompra(
+                    $emailCliente, 
+                    $fechaVuelta,
+                    $datosRutaVuelta->hora_salida, 
+                    $datosRutaVuelta->origen, 
+                    $datosRutaVuelta->destino,
+                    $arrNumTicket,
+                    true
+                );
+            }
 
             return view('v_home', [
                 'compraOk' => $arrAsientosRandomIda,
