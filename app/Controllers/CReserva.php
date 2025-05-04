@@ -328,10 +328,10 @@
             $asientos = [];
 
             // Calcular la cantidad de asientos por vagón
-            $asientosPorVagon = ceil($tren->capacidad / $tren->bagones);
+            $asientosPorVagon = ceil($tren->capacidad / $tren->vagones);
 
             // Generar la estructura de asientos por vagón
-            for ($vagon = 1; $vagon <= $tren->bagones; $vagon++) {
+            for ($vagon = 1; $vagon <= $tren->vagones; $vagon++) {
                 $asientos[$vagon] = [];
                 for ($asiento = 1; $asiento <= $asientosPorVagon; $asiento++) {
                     $numeroAsiento = ($vagon - 1) * $asientosPorVagon + $asiento;
