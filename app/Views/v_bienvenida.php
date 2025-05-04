@@ -52,7 +52,7 @@
                 <div class="card h-100">
                     <?php if (session()->get('admin')): ?>
                         <!-- Gestion de rutas -->
-                        <img src="<?= base_url('/images/gestionRutas.png') ?>" class="card-img-top" style="height: 150px;">
+                        <img src="<?= base_url('/images/carril-tren.jpg') ?>" class="card-img-top" style="height: 150px;">
                         <div class="card-body">
                             <h3 class="card-title">Gestión de Rutas</h3>
                             <p class="card-text">
@@ -62,7 +62,7 @@
                         </div>
                         <?php else: ?>
                             <!-- Consulta de Horarios -->
-                        <img src="<?= base_url('/images/rutas.png')?>" class="card-img-top" style="height: 150px;">
+                        <img src="<?= base_url('/images/tren-rutas.jpg')?>" class="card-img-top" style="height: 150px;">
                         <div class="card-body">
                             <h3 class="card-title">Horarios y Rutas</h3>
                             <p class="card-text">
@@ -78,7 +78,7 @@
                 <div class="card h-100">
                     <?php if (session()->get('admin')): ?>
                         <!-- Gestion de averias -->          
-                        <img src="<?= base_url('/images/averias.png')?>" class="card-img-top" style="height: 150px;">
+                        <img src="<?= base_url('/images/averias.avif')?>" class="card-img-top" style="height: 150px;">
                         <div class="card-body">
                             <h3 class="card-title">Gestión de averías</h3>
                             <p class="card-text">
@@ -88,7 +88,7 @@
                         </div>
                     <?php else: ?>
                         <!-- Tarifas -->
-                        <img src="<?= base_url('/images/precio.png')?>" class="card-img-top" style="height: 150px;">
+                        <img src="<?= base_url('/images/precio1.png')?>" class="card-img-top" style="height: 150px;">
                         <div class="card-body">
                             <h3 class="card-title">Tarifas</h3>
                             <p class="card-text">

@@ -1,3 +1,7 @@
+<?= $this->section("title") ?>
+    Tu opinión
+<?= $this->endSection(); ?>
+
 <h1 class="text-center">ULTIMAS RESERVAS COMPLETADAS</h1>
 <!-- Error  -->
 <?php if (isset($msgErrOpin)): ?>

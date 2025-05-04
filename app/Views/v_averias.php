@@ -10,13 +10,7 @@
     <div class="col-12 mb-2">
         <?= form_open(current_url(), ['method' => 'post']); ?>
             <?= form_hidden('mostrarForm', '1'); ?>
-            <?= form_input([
-                'type' => 'submit',
-                'name' => 'mostrarForm',
-                'value' => 'Añadir Avería',
-                'class' => 'btn bg-primary float-left',
-                'style' => 'color: white;'
-            ]); ?>
+            <?= form_input(['type' => 'submit', 'name' => 'mostrarForm', 'value' => 'Añadir Nueva Avería', 'class' => 'btn btn-primary float-left', 'style' => 'color: white;']); ?>
         <?= form_close(); ?>
     </div>
     <!-- msg info de eliminacion -->
@@ -43,90 +37,53 @@
     <div class="col-md-3" style="background-color:rgb(13, 151, 244);">
         <div class="boxHorariosHome MT20">
             <div class="contCampos" style="padding: 5px;">
-                <h2 style="color: white;" class="text-center">Filtros</h2>
+                <h2 style="color: white;" class="text-center">Filtro</h2>
                 <hr>
                 <?= form_open(current_url(), ['method' => 'post']); ?>
                 <p>
-                    <b style="color: white;">Número de serie </b>
+                    <?= form_label('Número de serie:', '', ['style' => 'color:white; font-size: 18px;']) ?>
                     <?php 
-                        $numSerieSel = $_POST['numSerieAveria'] ?? '';    // Recuperar datos si hay
-                        echo form_input([
-                            'type' => 'text',
-                            'name' => 'numSerieAveria',
-                            'value' => $numSerieSel,
-                            'class' => 'form-control'
-                        ]);
+                        $numSerieSel = $_POST['numSerieAveria'] ?? ''; 
+                        echo form_input(['type' => 'text', 'name' => 'numSerieAveria', 'value' => $numSerieSel, 'class' => 'form-control']);
                     ?>
                 </p>
                 <p>
-                    <b style="color: white;">Fecha </b>
-                    <br>
+                    <?= form_label('Fecha:', '', ['style' => 'color:white; font-size: 18px;']) ?>
                     <?php
                         $fechaSel = $_POST['fechaAveria'] ?? '';
-                        echo form_input([
-                            'type' => 'date',
-                            'name' => 'fechaAveria',
-                            'value' => $fechaSel,
-                            'class' => 'form-control'
-                        ]);
+                        echo form_input(['type' => 'date', 'name' => 'fechaAveria', 'value' => $fechaSel, 'class' => 'form-control']);
                     ?>
                 </p>
                 <p>
-                    <b style="color: white;">Coste </b>
+                    <?= form_label('Coste:', '', ['style' => 'color:white; font-size: 18px;']) ?>
                     <br>
                     <?php
                         $costeMinSel = $_POST['costeMinAveria'] ?? '';
                         $costeMaxSel = $_POST['costeMaxAveria'] ?? '';
-                        echo form_input([
-                            'type' => 'number',
-                            'name' => 'costeMinAveria',
-                            'min' => '0',
-                            'value' => $costeMinSel,
-                            'placeholder' => 'Mín',
-                            'style' => 'display: inline-block; width: 45%;',
-                            'class' => 'form-control'
-                        ]);
+                        echo form_input(['type' => 'number', 'name' => 'costeMinAveria', 'min' => '0', 'value' => $costeMinSel, 'placeholder' => 'Mín', 'style' => 'display: inline-block; width: 45%;', 'class' => 'form-control']);
                         echo '<b style="color: white;"> - </b>';
-                        echo form_input([
-                            'type' => 'number',
-                            'name' => 'costeMaxAveria',
-                            'min' => '0',
-                            'value' => $costeMaxSel,
-                            'placeholder' => 'Máx',
-                            'style' => 'display: inline-block; width: 45%;',
-                            'class' => 'form-control'
-                        ]);
+                        echo form_input(['type' => 'number', 'name' => 'costeMaxAveria', 'min' => '0', 'value' => $costeMaxSel, 'placeholder' => 'Máx', 'style' => 'display: inline-block; width: 45%;', 'class' => 'form-control']);
                     ?>
                 </p>
                 <p>
-                    <b style="color: white;">Estado de reparación </b>
+                    <?= form_label('Estado de reparación:', '', ['style' => 'color:white; font-size: 18px;']) ?>
                     <br>
                     <?php
                         $estadoAveria = $_POST['estadoAveria'] ?? 2;
-                        echo form_radio(['name' => 'estadoAveria',
-                                        'value' => 1,
-                                        'checked' => $estadoAveria == 1]); // Marcado si el valor enviado es 1
-                        echo form_label('Reparado', 'reparado', ['style' => 'color: white;']);
-                    
-                        echo form_radio(['name' => 'estadoAveria',
-                                        'value' => 0,
-                                        'checked' => $estadoAveria == 0]);
-                        echo form_label('Averiado', 'averiado', ['style' => 'color: white;']);
 
-                        echo form_radio(['name' => 'estadoAveria',
-                                        'value' => 2,
-                                        'checked' => $estadoAveria == 2]);
-                        echo form_label('Ambos', 'ambos', ['style' => 'color: white;']);
+                        echo form_radio(['name' => 'estadoAveria', 'value' => 1, 'checked' => $estadoAveria == 1]);
+                        echo form_label('Reparado', 'reparado', ['style' => 'color: white; margin-Right: 10px']);
+                    
+                        echo form_radio(['name' => 'estadoAveria', 'value' => 0, 'checked' => $estadoAveria == 0]);
+                        echo form_label('Averiado', 'averiado', ['style' => 'color: white; margin-Right: 10px']);
+
+                        echo form_radio(['name' => 'estadoAveria', 'value' => 2, 'checked' => $estadoAveria == 2]);
+                        echo form_label('Ambos', 'ambos', ['style' => 'color: white; margin-Right: 10px']);
                     ?>
                 </p>
                 <div class="text-center">
-                    <?php
-                        echo form_input([
-                            'type' => 'submit',
-                            'name' => 'aplicarFiltros',
-                            'value' => 'Aplicar'
-                        ]);
-                    ?>
+                    <?= form_submit('aplicarFiltros', 'Aplicar Filtros', ['class' => 'btn btn-light']) ?>
+                    <a href="<?= current_url() ?>" class="btn btn-secondary">Limpiar Filtros</a>
                 </div>
                 <?= form_close(); ?>
             </div>
@@ -150,83 +107,44 @@
             </thead>
             <tbody>
                 <?php 
-                    // Mostrar todos  datos
-                    if (!isset($datosFiltrados)) {
-                        foreach($datosAverias as $averia) {
-                            echo '<tr>';
-                                echo '<td>';
-                                    echo $averia->id_averia;
-                                echo '</td>';
-                                echo '<td>';
-                                    echo $averia->num_serie;
-                                echo '</td>';
-                                echo '<td>';
-                                    echo $averia->descripcion;
-                                echo '</td>';
-                                echo '<td>';
-                                    echo date('d/m/Y H:i', strtotime($averia->fecha));
-                                echo '</td>';
-                                echo '<td>';
-                                    echo $averia->coste . '€';
-                                echo '</td>';
-                                echo '<td>';
-                                    echo $averia->reparada ? "Sí" : "No";
-                                echo '</td>'; 
-                                echo '<td>';
-                                    echo '<a href="' . site_url("/admin/averias/modificar/" . $averia->id_averia) . '" 
-                                    class="btn btn-warning">Editar</a>';
-                                echo '</td>';
-                                echo '<td>';
-                                    echo form_open(current_url(), ['method' => 'post']);
-                                        echo form_hidden('id_averiaBorrar', $averia->id_averia);
-                                        echo form_input([
-                                            'type' => 'submit',
-                                            'value' => 'Eliminar',
-                                            'class' => 'btn btn-danger']);
-                                    echo form_close();
-                                echo '</td>';
-                            echo '</tr>';
-                        }
-                    } else {
-                        // Mostrar datos filtrados
-                        foreach($datosFiltrados as $averia) {
-                            echo '<tr>';
-                                echo '<td>';
-                                    echo $averia->id_averia;
-                                echo '</td>';
-                                echo '<td>';
-                                    echo $averia->num_serie;
-                                echo '</td>';
-                                echo '<td>';
-                                    echo $averia->descripcion;
-                                echo '</td>';
-                                echo '<td>';
-                                    echo date('d/m/Y H:i', strtotime($averia->fecha));
-                                echo '</td>';;
-                                echo '<td>';
-                                    echo $averia->coste . '€';
-                                echo '</td>';
-                                echo '<td>';
-                                    echo $averia->reparada ? "Sí" : "No";
-                                echo '</td>';
-                                echo '<td>';
-                                    echo '<a href="' . site_url("/admin/averias/modificar/" . $averia->id_averia) . '" 
-                                        class="btn btn-warning">Editar</a>';
-                                echo '</td>';
-                                echo '<td>';
-                                    echo form_open(current_url(), ['method' => 'post']);
-                                        echo form_hidden('id_averiaBorrar', $averia->id_averia);
-                                        echo form_input([
-                                            'type' => 'submit',
-                                            'value' => 'Eliminar',
-                                            'class' => 'btn btn-danger']);
-                                    echo form_close();
-                                echo '</td>';
-                            echo '</tr>';
-                        }
-                    }
+                    // Mostrar datos filtrados o todos los datos
+                    $averias = isset($datosFiltrados) ? $datosFiltrados : $datosAverias;
+                    foreach($averias as $averia) :
                 ?>
-
+                    <tr>
+                        <td>
+                            <?= $averia->id_averia ?>
+                        </td>
+                        <td>
+                            <?= $averia->num_serie ?>
+                        </td>
+                        <td>
+                            <?= $averia->descripcion ?>
+                        </td>
+                        <td>
+                            <?= date('d/m/Y H:i', strtotime($averia->fecha)) ?>
+                        </td>
+                        <td>
+                            <?= $averia->coste . '€' ?>
+                        </td>
+                        <td>
+                            <?php if ($averia->reparada): ?>
+                                <img src="<?= base_url('/images/reparada.png') ?>" alt="Reparada" width="30" height="30">
+                            <?php else: ?>
+                                <img src="<?= base_url('/images/averiada.png') ?>" alt="Averiada" width="30" height="30">
+                            <?php endif; ?>
+                        </td>
+                        <td>
+                            <a href="<?= site_url("/admin/averias/modificar/" . $averia->id_averia) ?>" class="btn btn-warning">Editar</a>
+                        </td>
+                        <td>
+                            <?= form_open(current_url(), ['method' => 'post']); ?>
+                                <?= form_hidden('id_averiaBorrar', $averia->id_averia); ?>
+                                <?= form_input(['type' => 'submit', 'value' => 'Eliminar', 'class' => 'btn btn-danger']); ?>
+                            <?= form_close(); ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
             </tbody>
         </table>
     </div>
