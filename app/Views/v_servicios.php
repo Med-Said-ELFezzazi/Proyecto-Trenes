@@ -1,3 +1,7 @@
+<?= $this->extend("plantillas/layout2zonas"); ?>
+
+<?= $this->section("principal"); ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -54,9 +58,6 @@
 </head>
 <body>
     <div class="container my-5">
-        <div class="ticket-footer">
-            <?= anchor("/reserva", "VOLVER ATRÁS", ['class' => 'btn-back']); ?>
-        </div>
         
         <!-- Título y tabla de información del viaje (como antes) -->
         <h4 class="text-center my-4 text-primary">🚌 Servicios posibles para la IDA</h4>
@@ -187,6 +188,7 @@
 
         <?php if ($mostrarBoton): ?>
             <div class="text-center mt-4">
+                <?= anchor("/reserva", "VOLVER ATRÁS", ['class' => 'btn btn-primary btn-lg px-4']); ?>
                 <?= form_input([
                     'type' => 'submit',
                     'name' => 'comprar',
@@ -207,3 +209,4 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+<?= $this->endSection(); ?>

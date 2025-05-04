@@ -1,3 +1,7 @@
+<?= $this->extend("plantillas/layout2zonas"); ?>
+
+<?= $this->section("principal"); ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -128,3 +132,4 @@
 </div>
 </body>
 </html>
+<?= $this->endSection(); ?>
