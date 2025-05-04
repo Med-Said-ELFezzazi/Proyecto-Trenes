@@ -215,7 +215,7 @@
     }
 
     
-    public function destinosPorOrigen($origen) {
+    public function destinosPorOrigen2($origen) {
         $builder = $this->db->table('rutas');
         $builder->select('destino');
         $builder->where('origen', $origen);
@@ -241,5 +241,15 @@
     {
         $ruta = $this->find($idRuta);
         return $ruta ? $ruta->tarifa : null;
+    }
+
+    public function datosRutas2($fecha, $ciudad_origin, $ciudad_destino) {
+        $rutas = $this
+            ->like('hora_salida', $fecha, 'after')
+            ->where('origen', $ciudad_origin)
+            ->where('destino', $ciudad_destino)
+            ->orderBy('hora_salida', 'ASC')
+            ->findAll();
+        return $rutas;
     }
 }

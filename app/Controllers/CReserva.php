@@ -47,7 +47,7 @@
 
             if(!empty($origenSeleccionado)){
                 // Llama al modelo para obtener los destinos posibles
-                $ciudadesDes = $this->modeloRutas->destinosPorOrigen($origenSeleccionado);
+                $ciudadesDes = $this->modeloRutas->destinosPorOrigen2($origenSeleccionado);
                 $ciudadesDes = array_combine($ciudadesDes, $ciudadesDes);
                 return view("v_home", [
                     'ciudadesOrg' => $ciudadesOrg,
@@ -101,7 +101,7 @@
             // 4. Procesar fecha de ida
             $fecha_ida = $this->formatearFecha($postData['fecha_ida']);
 
-            $rutas_ida = $this->modeloRutas->datosRutas($fecha_ida, $origenSeleccionado, $destino);
+            $rutas_ida = $this->modeloRutas->datosRutas2($fecha_ida, $origenSeleccionado, $destino);
             $servicios_ida = $this->dameServicios($rutas_ida, $Numbilletes);
 
             $servicios_vuelta = [];
@@ -123,7 +123,7 @@
 
                 $rutas_vuelta = [];
                 if (!empty($fecha_vuelta) && !empty($origenSeleccionado) && !empty($destino)) {
-                    $rutas_vuelta = $this->modeloRutas->datosRutas($fecha_vuelta, $destino, $origenSeleccionado);
+                    $rutas_vuelta = $this->modeloRutas->datosRutas2($fecha_vuelta, $destino, $origenSeleccionado);
                 }
 
                 $servicios_vuelta= $this->dameServicios($rutas_vuelta,$Numbilletes);

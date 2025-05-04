@@ -28,8 +28,12 @@ $routes->get('/tarifas', 'CVisitante::tarifas');
 // Reservar
 $routes->match(['GET', 'POST'], '/reserva', 'CReserva::reservar');
 $routes->match(['GET', 'POST'], '/reserva/servicios', 'CReserva::servicios');
+$routes->match(['GET', 'POST'], '/reserva/elegirAsiento', 'CReserva::elegirAsiento');
+$routes->match(['GET', 'POST'], '/reserva/revisarCompra', 'CReserva::revisarCompra');
+
 // REalizar la compra
-$routes->post('/reserva/servicios/compra', 'CReserva::realizarCompra');
+$routes->post('reserva/realizarCompra', 'CReserva::realizarCompra');
+$routes->post('reserva/confirmarCompra', 'CReserva::realizarCompra');
 
 
 // Cerrar sesión
