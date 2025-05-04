@@ -1,3 +1,29 @@
+<style>
+     .ticket-footer {
+            text-align: center;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        .ticket-footer a {
+            display: inline-block;
+            padding: 8px 20px;
+            background-color: #0d6efd;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .ticket-footer a:hover {
+            background-color: #0b5ed7;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+</style>
 <div class="container">
     <div class="row">
         <div class="col-12 text-center">
@@ -10,7 +36,9 @@
             <?php endif; ?>
 
             <br><br>
-            <a href="<?= site_url('home'); ?>">Volver a la página Home</a>
+            <div class="ticket-footer">
+                <a btn-back href="<?= site_url('home'); ?>">Volver a la página Home</a>
+            </div>
         </div>
     </div>
 </div>

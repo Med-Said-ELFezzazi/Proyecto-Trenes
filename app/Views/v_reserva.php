@@ -1,22 +1,9 @@
-<?php
-    // Al hacer click sobre ver servicios 
-    $mostrarServicios = false;
-    $error = '';
-    $numBilletesSel = 1;
-    if (isset($_POST['verServicios'])) {
-        // Validación de origen y destino
-        if ($_POST['origen'] == $_POST['destino']) {
-            $error .= 'El origen y destino no pueden ser iguales';
-        } else if (!isset($_POST['asientoAleatorio']) && $_POST['asiento'] == '') {
-            $error .= 'Debe introducir un número de asiento o marcar la casilla de asiento aleatorio';
-        } else {
-            $mostrarServicios = true;
-        }
+<?php if(session()->getFlashdata('error')): ?>
+    <div class="alert alert-danger">
+        <?= session()->getFlashdata('error') ?>
+    </div>
+<?php endif; ?>
 
-        $numBilletesSel = $_POST['Numbilletes'];
-    }
-    
-?>
 <!DOCTYPE html>
 <html lang="es">
     <head>
@@ -53,18 +40,13 @@
     <body>
         <div class="container my-5">
             <div class="row justify-content-center">
-                <?php if ($error != ''): ?>
-                    <div class="alert alert-danger">
-                        <?= $error; ?>
-                    </div>
-                <?php endif; ?>
                 <div class="col-md-8">
                     <div class="card">
                         <div class="card-header bg-primary text-white text-center">
                             <h3 class="mb-0">Reserva tu Viaje</h3>
                         </div>
                         <div class="card-body">
-                            <?= form_open(site_url().'/reserva/servicios', ['method' => 'post']); ?>
+                            <?= form_open(site_url().'/reserva', ['method' => 'post']); ?>
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <label class="form-label">Fecha de Ida</label>
@@ -73,6 +55,7 @@
                                         $fechaIdaSel = $_POST['fecha_ida'] ?? $fecha_actual;
                                         echo form_input([
                                             'type' => 'date',
+                                            'id' => 'fecha_ida',
                                             'name' => 'fecha_ida',
                                             'class' => 'form-control',
                                             'value' => $fechaIdaSel,
@@ -110,19 +93,35 @@
                             </div>
                                 <div class="row mb-3">
                                     <div class="col-md-6">
-                                        <label class="form-label">Origin</label>
+                                        <label class="form-label"> Origen</label>
                                         <?php 
-                                            echo form_dropdown('origen', $ciudadesOrg, $_POST['origen'] ?? null, [
-                                                    'class' => 'form-select'
-                                                ]);                                 
+                                            $ciudadesOrg = ['' => '---'] + $ciudadesOrg;
+                                            echo form_dropdown(
+                                                'origen',
+                                                $ciudadesOrg,
+                                                $_POST['origen'] ?? null,
+                                                [
+                                                    'class' => 'form-select',
+                                                    'onchange' => 'this.form.submit()'
+                                                ]
+                                            );                                 
                                         ?>
                                     </div>
+
                                     <div class="col-md-6">
                                         <label class="form-label">Destino</label>
-                                        <?php 
+                                        <?php                                      
+                                        if(isset($origenSeleccionado) && $origenSeleccionado!=null){
                                             echo form_dropdown('destino', $ciudadesDes, $_POST['destino'] ?? null, [
-                                                    'class' => 'form-select'
-                                                ]);                                 
+                                                'class' => 'form-select'
+                                            ]);  
+                                        }else{
+                                            echo form_dropdown('destino', ['' => 'Selecciona un origen primero'], '', [
+                                                'class' => 'form-select',
+                                                'disabled' => 'disabled'
+                                            ]); 
+                                        } 
+                                                                       
                                         ?>
                                     </div>
                                 </div>
@@ -136,22 +135,13 @@
                                                 'name' => 'Numbilletes',
                                                 'class' => 'form-control',
                                                 'min' => '1',
-                                                'value' => $numBilletesSel
+                                                'value' => 1
                                             ]);
                                         ?>
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Número de Asiento <i>'Considera de elegir asiento aleatorio 
-                                            al comprar más de un billete sino se realiza la compra de solo 1 viaje'</i></label>
-                                        <?php
-                                        echo form_input([
-                                            'type' => 'number',
-                                            'name' => 'asiento',
-                                            'id' => 'asiento',
-                                            'class' => 'form-control',
-                                            'min' => '1'
-                                        ]);
-                                        ?>
+                                            al comprar más de un billete sino se realiza la compra de solo 1 viaje' (Elegir esta opción costará 5€ por persona)</i></label>
                                         <div class="form-check mt-2">
                                             <?php
                                                 echo form_input([
@@ -171,7 +161,8 @@
                                         'type' => 'submit',
                                         'name' => 'verServicios',
                                         'value' => 'Ver Servicios',
-                                        'class' => 'btn btn-primary'
+                                        'class' => 'btn btn-primary',
+                                        'formaction' => base_url('reserva/servicios')
                                     ]);
                                 ?>
                             <?= form_close(); ?>
@@ -180,34 +171,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Mostrar servicios -->
-        <?php 
-            if ($mostrarServicios) {
-                // Número de asiento
-                $numAsiento = null;    // Siginifica que hay q generar uno random
-                if (!isset($_POST['asientoAleatorio'])) {
-                    $numAsiento = $_POST['asiento'];
-                }
-                // Guardar e n session
-                session()->set('numAsientoInsertado', $numAsiento);
-
-                // Guardar en session numBilletes
-                session()->set('numBilletes', $numBilletesSel);
-
-                echo view('v_servicios');
-            }
-        ?>
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <?php if (isset($msgErrorLleno)): ?>
-                <div class="alert alert-danger text-center" role="alert">
-                <strong>Error!</strong> <?php echo $msgErrorLleno; ?>
-                </div>
-                <?php endif; ?>
-            </div>
-        </div>
-
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="<?= base_url('/js/reservas.js'); ?>"></script>

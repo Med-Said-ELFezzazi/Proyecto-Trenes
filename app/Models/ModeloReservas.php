@@ -66,8 +66,7 @@
 
     // Función que inserta una reserva Y DEVUELVE true o false
     public function agregarReserva($dni, $id_ruta, $arrAsientos) {
-        $this->db->transStart();
-    
+        // Quitar transacción interna (ya manejada por realizarCompra)
         foreach ($arrAsientos as $asiento) {
             $this->insert([
                 'dni' => $dni,
@@ -76,23 +75,24 @@
                 'fecha_reserva' => date('Y-m-d H:i:s')
             ]);
         }
-    
-        $this->db->transComplete();
-    
-        return $this->db->transStatus();
+        return true; // Siempre retorna éxito, el error se maneza con transStatus()
     }
+    
     
 
     // Función que obtiene idTicket/num_asiento de una reserva    
-    public function dameIdTicket($dni, $id_ruta, $fecha_reserva) {
-        $tickets = $this
-            ->select('id_ticket, num_asiento')
-            ->where('dni', $dni)
-            ->where('id_ruta', $id_ruta)
-            ->where("DATE(fecha_reserva)", $fecha_reserva) // Comparar solo la fecha
-            ->get()
-            ->getResultArray(); // Devuelve el resultado en formato array
-        
+    public function dameIdTicket($dni, $arrAsientos, $fecha_reserva) {
+        $tickets=[];
+        foreach($arrAsientos as $asiento){
+            $tickets[] = $this
+                ->select('id_ticket, num_asiento')
+                ->where('dni', $dni)
+                ->where('num_asiento', $asiento)
+                ->where("DATE(fecha_reserva)", $fecha_reserva) // Comparar solo la fecha
+                ->get()
+                ->getResultArray(); // Devuelve el resultado en formato array
+        }
+       var_dump($tickets);
         // Devolver un array de resultados
         return empty($tickets) ? [] : $tickets;
     }  
@@ -159,6 +159,17 @@
         return $this->where('id_ruta', $id_ruta)
                     ->where('num_asiento', $num_asiento)
                     ->countAllResults() > 0;
+    }
+
+    public function asientosOcupados($id_ruta)
+    {
+        // Devuelve un array con los números de asiento ya reservados para esa ruta
+        $query = $this->select('num_asiento')
+                      ->where('id_ruta', $id_ruta)
+                      ->findAll();
+    
+        // Extrae solo los números
+        return array_column($query, 'num_asiento');
     }
 
 
