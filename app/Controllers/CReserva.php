@@ -188,11 +188,10 @@
             // Arrays para almacenar los valores de id_ticket y num_asiento
             $idTickets = [];
             $asientos = [];
-        
             // Rellenar los arrays
             foreach ($arrTicketAsiento as $ticket) {
-                $idTickets[] = $ticket['id_ticket'];
-                $asientos[] = $ticket['num_asiento'];
+                $idTickets[] = $ticket[0]['id_ticket'];
+                $asientos[] = $ticket[0]['num_asiento'];
             }
         
             // Convertir los arrays a cadenas separadas por coma
@@ -502,7 +501,7 @@
 
             if($id_ruta_vuelta!=null){
                 $emailCliente = $this->modeloClientes->dameCliente(session()->get('dniCliente'))->email;
-                $arrNumTicket = $this->modeloReservas->dameIdTicket(session()->get('dniCliente'), $id_ruta_vuelta, date('Y-m-d'));
+                $arrNumTicket = $this->modeloReservas->dameIdTicket(session()->get('dniCliente'), $arrAsientosRandomVuelta, date('Y-m-d'));
                 $fechaVuelta = new DateTime($fecha_vuelta);
                 $emailEnviado = $this->enviarEmailCompra(
                     $emailCliente, 
@@ -514,7 +513,6 @@
                     true
                 );
             }
-
             return view('v_home', [
                 'compraOk' => $arrAsientosRandomIda,
                 'emailOk' => $emailEnviado

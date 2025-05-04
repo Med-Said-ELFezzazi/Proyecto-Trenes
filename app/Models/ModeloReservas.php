@@ -81,15 +81,18 @@
     
 
     // Función que obtiene idTicket/num_asiento de una reserva    
-    public function dameIdTicket($dni, $id_ruta, $fecha_reserva) {
-        $tickets = $this
-            ->select('id_ticket, num_asiento')
-            ->where('dni', $dni)
-            ->where('id_ruta', $id_ruta)
-            ->where("DATE(fecha_reserva)", $fecha_reserva) // Comparar solo la fecha
-            ->get()
-            ->getResultArray(); // Devuelve el resultado en formato array
-        
+    public function dameIdTicket($dni, $arrAsientos, $fecha_reserva) {
+        $tickets=[];
+        foreach($arrAsientos as $asiento){
+            $tickets[] = $this
+                ->select('id_ticket, num_asiento')
+                ->where('dni', $dni)
+                ->where('num_asiento', $asiento)
+                ->where("DATE(fecha_reserva)", $fecha_reserva) // Comparar solo la fecha
+                ->get()
+                ->getResultArray(); // Devuelve el resultado en formato array
+        }
+       var_dump($tickets);
         // Devolver un array de resultados
         return empty($tickets) ? [] : $tickets;
     }  
