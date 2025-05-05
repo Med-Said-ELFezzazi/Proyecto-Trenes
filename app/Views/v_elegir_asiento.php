@@ -204,7 +204,8 @@
             <?php endforeach; ?>
         <?php endif; ?>
 
-        <button type="submit" class="btn btn-primary">Revisar Compra</button>
+        <button type="submit" class="btn btn-success">Revisar Compra</button>
+        <?= anchor("/reserva", "VOLVER A RESERVA", ['class' => 'btn btn-primary']); ?>
         <?= form_close(); ?>
     </div>
 

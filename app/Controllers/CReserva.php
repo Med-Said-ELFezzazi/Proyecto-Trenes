@@ -303,6 +303,21 @@
             $idRutaIda = $this->request->getPost('servicioSel');
             $idRutaVuelta = $this->request->getPost('servicioVueltaSel');
 
+            if ($idRutaIda && $idRutaVuelta!=null) {
+                $datosRutaIda = $this->modeloRutas->find($idRutaIda);
+                $datosRutaVuelta = $this->modeloRutas->find($idRutaVuelta);
+            
+                if ($datosRutaIda && $datosRutaVuelta) {
+                    $horaLlegadaIda = strtotime($datosRutaIda->hora_llegada);
+                    $horaSalidaVuelta = strtotime($datosRutaVuelta->hora_salida);
+            
+                    if ($horaLlegadaIda > $horaSalidaVuelta) {
+                        // Redirigir a la página anterior con mensaje de error
+                        return redirect()->to('/reserva')->with('error', 'El servicio de ida no puede llegar después de la salida del servicio de vuelta.');
+                    }
+                }
+            }
+
             // Preparar los datos para pasar a la vista
             $data['idRutaIda'] = $idRutaIda;
             $data['idRutaVuelta'] = $idRutaVuelta;
@@ -362,6 +377,24 @@
                 return redirect()->to('/reserva')->with('error', 'La sesión ha expirado.');
             }
 
+            $idRutaIda = $this->request->getPost('servicioSel');
+            $idRutaVuelta = $this->request->getPost('servicioVueltaSel');
+
+            if ($idRutaIda && $idRutaVuelta!=null) {
+                $datosRutaIda = $this->modeloRutas->find($idRutaIda);
+                $datosRutaVuelta = $this->modeloRutas->find($idRutaVuelta);
+            
+                if ($datosRutaIda && $datosRutaVuelta) {
+                    $horaLlegadaIda = strtotime($datosRutaIda->hora_llegada);
+                    $horaSalidaVuelta = strtotime($datosRutaVuelta->hora_salida);
+            
+                    if ($horaLlegadaIda > $horaSalidaVuelta) {
+                        // Redirigir a la página anterior con mensaje de error
+                        return redirect()->to('/reserva')->with('error', 'El servicio de ida no puede llegar después de la salida del servicio de vuelta.');
+                    }
+                }
+            }
+
             // Obtener los ID de ruta seleccionados
             $idRutaIda = $this->request->getPost('servicioSel');
             $idRutaVuelta = $this->request->getPost('servicioVueltaSel');
@@ -377,6 +410,19 @@
             // Recuperar los asientos seleccionados
             $asientosIda = $this->request->getPost('asientos_ida');
             $asientosVuelta = $this->request->getPost('asientos_vuelta');
+            
+            $numBilletes=session()->get('Numbilletes');
+            if (!empty($asientosVuelta)) {
+                // Si hay asientos de vuelta, validar ambos arrays
+                if (count($asientosIda) != $numBilletes || count($asientosVuelta) != $numBilletes) {
+                    return redirect()->to('/reserva')->with('error', 'Debe marcar tantos asientos como número de billetes para ida y vuelta.');
+                }
+            } else {
+                // Solo ida, validar solo el array de ida
+                if (count($asientosIda) != $numBilletes) {
+                    return redirect()->to('/reserva')->with('error', 'Debe marcar tantos asientos como número de billetes para el viaje de ida.');
+                }
+            }
 
             // Guardar los asientos en la sesión
             session()->set('asientos_ida', $asientosIda);

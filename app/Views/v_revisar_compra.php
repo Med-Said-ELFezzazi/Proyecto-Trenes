@@ -128,6 +128,7 @@
     <!-- Botón de confirmar -->
     <?= form_open(base_url('reserva/confirmarCompra')); ?>
         <button type="submit" class="btn btn-success btn-lg px-5">Confirmar Compra</button>
+        <?= anchor("/reserva", "VOLVER A RESERVA", ['class' => 'btn btn-primary btn-lg px-5']); ?>
     <?= form_close(); ?>
 </div>
 </body>
