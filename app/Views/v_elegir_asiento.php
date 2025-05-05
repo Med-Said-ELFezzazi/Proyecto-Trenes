@@ -181,8 +181,12 @@
                                     <div class="asiento-tren">
                                         <input type="checkbox" class="asiento-checkbox-vuelta"
                                             id="asiento_vuelta_<?= $asiento['numero'] ?>"
-                                            name="asientos_vuelta[]" value="<?= $asiento['numero'] ?>">
-                                        <label for="asiento_vuelta_<?= $asiento['numero'] ?>"><?= $asiento['numero'] ?></label>
+                                            name="asientos_vuelta[]" value="<?= $asiento['numero'] ?>"
+                                            <?= !empty($asiento['ocupado']) ? 'disabled' : '' ?>>
+                                            <label for="asiento_vuelta_<?= $asiento['numero'] ?>"
+                                                class="<?= !empty($asiento['ocupado']) ? 'asiento-ocupado' : '' ?>">
+                                                <?= $asiento['numero'] ?>
+                                            </label>
                                     </div>
                                 <?php endfor; ?>
                                 <?php
