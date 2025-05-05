@@ -101,7 +101,12 @@
             // 4. Procesar fecha de ida
             $fecha_ida = $this->formatearFecha($postData['fecha_ida']);
 
-            $rutas_ida = $this->modeloRutas->datosRutas2($fecha_ida, $origenSeleccionado, $destino);
+            $fechaHoraMinima = null;
+            if ($fecha_ida === date('Y-m-d')) {
+                $fechaHoraMinima = date('Y-m-d H:i:s'); // fecha y hora actual
+            }
+
+            $rutas_ida = $this->modeloRutas->datosRutas2($fecha_ida, $origenSeleccionado, $destino, $fechaHoraMinima);
             $servicios_ida = $this->dameServicios($rutas_ida, $Numbilletes);
 
             $servicios_vuelta = [];

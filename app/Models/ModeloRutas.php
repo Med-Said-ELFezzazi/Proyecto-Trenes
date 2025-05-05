@@ -243,13 +243,19 @@
         return $ruta ? $ruta->tarifa : null;
     }
 
-    public function datosRutas2($fecha, $ciudad_origin, $ciudad_destino) {
-        $rutas = $this
-            ->like('hora_salida', $fecha, 'after')
-            ->where('origen', $ciudad_origin)
-            ->where('destino', $ciudad_destino)
-            ->orderBy('hora_salida', 'ASC')
-            ->findAll();
-        return $rutas;
+    public function datosRutas2($fecha, $origen, $destino, $fechaHoraMinima = null)
+    {
+        $builder = $this->where('origen', $origen)
+                        ->where('destino', $destino);
+    
+        if ($fechaHoraMinima !== null) {
+            // Filtrar por hora_salida >= fechaHoraMinima (fecha y hora)
+            $builder->where('hora_salida >=', $fechaHoraMinima);
+        } else {
+            // Si no hay fechaHoraMinima, filtrar solo por fecha (sin hora)
+            $builder->where('DATE(hora_salida)', $fecha);
+        }
+    
+        return $builder->orderBy('hora_salida', 'ASC')->findAll();
     }
 }
