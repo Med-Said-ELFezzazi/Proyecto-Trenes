@@ -10,49 +10,49 @@
             <i class="fa fa-bars"></i>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="nav navbar-nav ml-auto">
-                <?php
-                // URL actual
-                $currentUrl = current_url();
-
-                // Definir rutas y etiquetas según el tipo de usuario
-                if (session()->get('dniCliente')) {
-                    $links = [
-                        '/home' => 'Home',
-                        '/lineasHorarios' => 'Líneas y horarios',
-                        '/tarifas' => 'Tarifas',
-                        '/reserva' => 'Comprar billetes',
-                        '/opinion' => 'Tu opinión',
-                    ];
-                } elseif (session()->get('admin')) {
-                    $links = [
-                        '/admin/home' => 'Home',
-                        '/admin/trenes' => 'Administración de trenes',
-                        '/admin/rutas' => 'Gestión de Rutas',
-                        '/admin/averias' => 'Gestión averías',
-                    ];
-                } else {
-                     // Mostrar enlaces solo si el usuario está en la página /visitante
-                    if (strpos($currentUrl, '/visitante') !== false) {
+        <!-- Solo mostrar el menú si no estamos en la página de login o registro -->
+        <?php
+        $currentUrl = current_url();
+        // Verificar si estamos en las páginas de login o registro
+        if (strpos($currentUrl, '/autenticacion') === false) :
+        ?>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="nav navbar-nav ml-auto">
+                    <?php
+                    // Definir rutas y etiquetas según el tipo de usuario
+                    if (session()->get('dniCliente')) {
+                        $links = [
+                            '/home' => 'Home',
+                            '/lineasHorarios' => 'Líneas y horarios',
+                            '/tarifas' => 'Tarifas',
+                            '/reserva' => 'Comprar billetes',
+                            '/opinion' => 'Tu opinión',
+                        ];
+                    } elseif (session()->get('admin')) {
+                        $links = [
+                            '/admin/home' => 'Home',
+                            '/admin/trenes' => 'Administración de trenes',
+                            '/admin/rutas' => 'Gestión de Rutas',
+                            '/admin/averias' => 'Gestión de averías',
+                        ];
+                    } else {
+                        // Si no hay usuario autenticado, mostrar solo enlaces de visita pública
                         $links = [
                             '/lineasHorarios' => 'Líneas y horarios',
                             '/tarifas' => 'Tarifas',
                         ];
-                    } else {
-                        $links = [];
                     }
-                }
 
-                // Generar los enlaces de navegación
-                foreach ($links as $url => $label) {
-                    // Verificar si la URL actual coincide con el enlace
-                    $isActive = strpos($currentUrl, $url) !== false ? 'active' : '';
-                    echo "<li class='nav-item $isActive'><a class='nav-link' href='" . site_url($url) . "'>$label</a></li>";
-                }
-                ?>
-            </ul>
-        </div>
+                    // Generar los enlaces de navegación
+                    foreach ($links as $url => $label) {
+                        // Verificar si la URL actual coincide con el enlace
+                        $isActive = strpos($currentUrl, $url) !== false ? 'active' : '';
+                        echo "<li class='nav-item $isActive'><a class='nav-link' href='" . site_url($url) . "'>$label</a></li>";
+                    }
+                    ?>
+                </ul>
+            </div>
+        <?php endif; ?>
     </div>
 </nav>
     

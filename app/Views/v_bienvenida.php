@@ -1,24 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Bienvenidos</title>
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
-    </head>
-    <body>
-        <div class="container mt-5">
-            <div class="row">
-                <div class="col-md-8 offset-md-2 text-center">
-                    <?php if (session()->get('admin')): ?>
-                        <h1>Bienvenido <b style="color: green;"><?= session()->get('admin'); ?></b></h1>
-                        <p class="lead">Aqui tienes todo lo que puedes hacer</p>
-                    <?php else: ?>
-                        <h1>Bienvenido de nuevo <b style="color: blue;">'<?= session()->get('cliente')->nombre; ?>'</b></h1>
-                        <!-- <p class="lead">Tu compañero de confianza para un transporte cómodo y seguro.</p> -->
-                    <?php endif; ?>
-                </div>
+<?= $this->section("title") ?>
+    Home
+<?= $this->endSection(); ?>  
+    
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-8 offset-md-2 text-center">
+                <?php if (session()->get('admin')): ?>
+                    <h1>Bienvenido <b style="color: green;"><?= session()->get('admin'); ?></b></h1>
+                    <p class="lead">Aqui tienes todo lo que puedes hacer</p>
+                <?php else: ?>
+                    <h1>Bienvenido de nuevo <b style="color: blue;">'<?= session()->get('cliente')->nombre; ?>'</b></h1>
+                <?php endif; ?>
             </div>
+        </div>
 
 
         <div class="row g-4">
@@ -99,6 +93,5 @@
                     <?php endif; ?>
                 </div>
             </div>
-
         </div>
     </div>

@@ -1,5 +1,9 @@
 <?= $this->extend("plantillas/layout2zonas"); ?>
 
+<?= $this->section("title") ?>
+    Elegir asiento
+<?= $this->endSection(); ?>
+
 <?= $this->section("principal"); ?>
 
 <!DOCTYPE html>

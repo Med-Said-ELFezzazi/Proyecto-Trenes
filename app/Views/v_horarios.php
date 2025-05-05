@@ -1,7 +1,3 @@
-<?= $this->section("title") ?>
-    Consulta los horarios
-<?= $this->endSection(); ?>
-
 <div class="d-flex justify-content-between">
     <div class="p-3 mr-5" style="background-color:rgb(13, 151, 244);">
         <div class="boxHorariosHome MT20">

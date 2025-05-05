@@ -1,7 +1,7 @@
 <?= $this->extend("plantillas/layout2zonas"); ?>
 
 <?= $this->section("title") ?>
-    Gestión de Rutas
+    Gestión de rutas
 <?= $this->endSection(); ?>
 
 <?= $this->section("principal"); ?>
