@@ -407,6 +407,97 @@
 
             return view("v_viajes", ['datos' => $datosOrdenados]);
         }
+
+
+
+        public function enviarEmailCancelacion($emailCliente, $idReservas, $origen, $destino, $fecha, $horaSalida, $tarifa) {
+            // Obtener fecha y hora actual
+            $fechaCancelacion = date('Y-m-d');
+            $horaCancelacion = date('H:i');
+        
+            // Cuerpo del mensaje
+            $cuerpo = "
+                <h2 style='color: red;'>Cancelacion confirmada</h2>
+                <p>Tu reserva ha sido cancelada con exito. Detalles del trayecto:</p>
+                <div style='border: 2px dashed #dc3545; width: 500px; padding: 15px; background-color: #f8f9fa; font-family: sans-serif;'>
+                    <table border='0' style='width: 100%; font-size: 14px;'>
+                        <tr><td><b>IDs de reserva:</b></td><td>{$idReservas}</td></tr>
+                        <tr><td><b>Fecha del viaje:</b></td><td>{$fecha}</td></tr>
+                        <tr><td><b>Hora de salida:</b></td><td>{$horaSalida}</td></tr>
+                        <tr><td><b>Origen:</b></td><td>{$origen}</td></tr>
+                        <tr><td><b>Destino:</b></td><td>{$destino}</td></tr>
+                        <tr><td><b>Tarifa aplicada:</b></td><td>{$tarifa} Euros</td></tr>
+                        <tr><td><b>Fecha de cancelacion:</b></td><td>{$fechaCancelacion}</td></tr>
+                        <tr><td><b>Hora de cancelacion:</b></td><td>{$horaCancelacion}</td></tr>
+                    </table>
+                </div>
+                <br>
+                <p><i>Recibiras el reembolso conforme a la politica de cancelacion.</i></p>
+                <p>Gracias por confiar en nosotros.</p>
+            ";
+        
+            $emailService = Services::emailService();
+            return $emailService->sendEmail(
+                $emailCliente,
+                'Confirmacion de cancelacion de reserva',
+                $cuerpo
+            );
+        }
+        
+
+
+        public function cancelarReservasCli() {
+            $jsonReservas = $this->request->getPost('reservasObjs');
+            $jsonRuta = $this->request->getPost('rutaObjs');
+
+            // Conviertir a array asociativo
+            $reservas = json_decode($jsonReservas, true); 
+            $ruta = json_decode($jsonRuta, true);
+            if (!session()->has('ruta')) {
+                session()->set('ruta', $ruta);
+            }
+
+            $reservasSeleccionadas = (array) $this->request->getPost('reservas');
+
+            if (count($reservasSeleccionadas) > 0) {
+                $idReservas = '';
+                $count=0;
+
+                // Quitar el valor 'todos'
+                $reservasSeleccionadas = array_filter($reservasSeleccionadas, function($resv) {
+                    return $resv !== 'todos';
+                });
+
+                // Rellenar la variable de id-reservas
+                foreach ($reservasSeleccionadas as $resv) {
+                    if ($count == count($reservasSeleccionadas) - 1) {
+                        $idReservas .= $resv;
+                    } else {
+                        $idReservas .= $resv . ", ";
+                    }
+                    $count++;
+                    // Eliminar de la BD
+                    $this->modeloReservas->delete($resv);
+                }                
+
+                // ENVIAR EMAIL
+                $email = $this->modeloClientes->dameCliente(session()->get('dniCliente'))->email;
+                $horaFormateada = date('H:i', strtotime(session()->get('ruta', $ruta)['hora_salida']));
+
+                $this->enviarEmailCancelacion($email, $idReservas, session()->get('ruta', $ruta)['origen'], session()->get('ruta', $ruta)['destino'],
+                                        session()->get('ruta', $ruta)['fecha'], $horaFormateada, session()->get('ruta', $ruta)['tarifa']);
+
+                // Resetear las variables de session
+                session()->remove(['ruta', 'reservas']);
+
+                return view("v_cancelReserva", ['reservas' => $reservas, 'ruta' => $ruta, 'reservasSeleccionadas' => $reservasSeleccionadas]);
+            }
+
+            return view("v_cancelReserva", ['reservas' => $reservas, 'ruta' => $ruta]);
+        }
+
+
+
     } 
 
 

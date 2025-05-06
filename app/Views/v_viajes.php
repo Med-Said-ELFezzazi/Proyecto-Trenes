@@ -1,5 +1,9 @@
 <?= $this->extend("plantillas/layout2zonas"); ?>
 
+<?= $this->section("title") ?>
+    Viajes reservados
+<?= $this->endSection(); ?>
+
 <?= $this->section("principal"); ?>
 
 <?php
@@ -35,10 +39,10 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Mis viajes</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-        <!-- <link rel="stylesheet" href="<= base_url('css/styleAut.css'); ?>"> -->
+ 
+
     </head>
     <body>
         <?php 
@@ -100,17 +104,17 @@
                             <p class="card-text mb-0">
                                 📅 <?= date('d F', strtotime($ruta->fecha)) ?>
                                 <span style="margin: 0 10px; color: #ccc;">|</span>
-                                <strong>Reserva(s): </strong>
                                 <?php
-                                    $ids = array_map(fn($r) => $r->id_ticket, $reservas);
-                                    echo implode(', ', $ids);
+                                    $idsReservas = array_map(fn($r) => $r->id_ticket, $reservas);
+                                    echo count($idsReservas) == 1 ? "<strong>Reserva: </strong>" : "<strong>Reservas: </strong>";
+                                    echo implode(', ', $idsReservas);
                                 ?>
                             </p>
 
                             <div class="collapse" id="detalle<?= $ruta->id_ruta ?>">
-                                <strong>Asiento(s): </strong>
                                 <?php
                                     $asientos = array_map(fn($r) => $r->num_asiento, $reservas);
+                                    echo count($idsReservas) == 1 ? "<strong>Asiento: </strong>" : "<strong>Asientos: </strong>";
                                     echo implode(', ', $asientos);
                                 ?>
                                 <br>
@@ -119,10 +123,47 @@
                                 <br>
                                 <strong>Precio: </strong><?= $ruta->tarifa ?>€
                             </div>
+                            <br>
+                            <?php if ($esProxima): ?>
+
+                                <form action="<?= site_url('/cancelReserva') ?>" method="post" style="display: inline;">
+                                    <!-- <input type="hidden" name="ids" value="<= implode(',', $idsReservas) ?>"> -->
+                                    <input type="hidden" name="reservasObjs" value='<?= json_encode($reservas) ?>'>
+                                    <input type="hidden" name="rutaObjs" value='<?= json_encode($ruta) ?>'>
+
+                                    <button type="submit" class="btn btn-danger" style="width: auto;">
+                                        <i class="fas fa-ban"></i>
+                                        Cancelar <?php echo count($idsReservas) == 1 ? "reserva" : "reservas" ?> 
+                                    </button>
+                                </form>
+
+                            <?php endif; ?>
                         </div>
                         <button class="btn btn-primary float-end" data-bs-toggle="collapse" data-bs-target="#detalle<?= $ruta->id_ruta ?>">
                                 Ver detalles <i class="fas fa-chevron-down"></i>
                         </button> 
+
+
+                        <script>
+                            // Alternar sobre el texto del boton
+                            document.addEventListener('DOMContentLoaded', function () {
+                                // Obtiene el elemento de colapso y el boton de alternar
+                                const collapseEl = document.getElementById("detalle<?= $ruta->id_ruta ?>");
+                                const toggleBtn = document.querySelector('[data-bs-target="#detalle<?= $ruta->id_ruta ?>"]');
+
+                                // Evento cuando el colapso se muestra
+                                collapseEl.addEventListener('shown.bs.collapse', function () {
+                                    // Cambia el texto del boton para indicar que los detalles estan visibles
+                                    toggleBtn.innerHTML = 'Ocultar detalles <i class="fas fa-chevron-up"></i>';
+                                });
+
+                                // Evento cuando el colapso se oculta
+                                collapseEl.addEventListener('hidden.bs.collapse', function () {
+                                    toggleBtn.innerHTML = 'Ver detalles <i class="fas fa-chevron-down"></i>';
+                                });
+                            });
+                        </script>
+
                     </div>
                 </div>
                 <?php } }?>
