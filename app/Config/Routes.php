@@ -68,3 +68,4 @@ $routes->post('/opinion/add' , 'CReserva::insertarOpinion');
 
 // Mis viajes
 $routes->get('/misViajes', 'CReserva::getReservasCli');
+$routes->post('/cancelReserva', 'CReserva::cancelarReservasCli');
