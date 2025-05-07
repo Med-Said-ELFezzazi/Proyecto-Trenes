@@ -205,6 +205,9 @@
             <div class="alert alert-warning text-center mt-4">
                 🚫 No hay servicios disponibles en las fechas seleccionadas.<br>
                 <strong>Por favor, prueba a elegir otra fecha.</strong>
+                <br>
+                <br>
+                <?= anchor("/reserva", "VOLVER ATRÁS", ['class' => 'btn btn-primary btn-lg px-4']); ?>
             </div>
         <?php endif; ?>
         <?= form_close(); ?>

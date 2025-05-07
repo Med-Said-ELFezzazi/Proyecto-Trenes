@@ -86,6 +86,10 @@
             $soloIda = $this->request->getPost('soloIda');
 
             $Numbilletes = $this->request->getPost('Numbilletes');
+            if($Numbilletes==null){
+                session()->setFlashdata('error', 'Debes indicar cuantos billetes quieres');
+                return redirect()->back();
+            }
             session()->set('Numbilletes',$Numbilletes);
             $origenSeleccionado = $this->request->getPost('origen');
             $destino =  $this->request->getPost('destino');
@@ -412,15 +416,17 @@
             $asientosVuelta = $this->request->getPost('asientos_vuelta');
             
             $numBilletes=session()->get('Numbilletes');
-            if (!empty($asientosVuelta)) {
-                // Si hay asientos de vuelta, validar ambos arrays
-                if (count($asientosIda) != $numBilletes || count($asientosVuelta) != $numBilletes) {
-                    return redirect()->to('/reserva')->with('error', 'Debe marcar tantos asientos como número de billetes para ida y vuelta.');
-                }
-            } else {
-                // Solo ida, validar solo el array de ida
-                if (count($asientosIda) != $numBilletes) {
-                    return redirect()->to('/reserva')->with('error', 'Debe marcar tantos asientos como número de billetes para el viaje de ida.');
+            if($asientosIda!=null){
+                if (!empty($asientosVuelta)) {
+                    // Si hay asientos de vuelta, validar ambos arrays
+                    if (count($asientosIda) != $numBilletes || count($asientosVuelta) != $numBilletes) {
+                        return redirect()->to('/reserva')->with('error', 'Debe marcar tantos asientos como número de billetes para ida y vuelta.');
+                    }
+                } else {
+                    // Solo ida, validar solo el array de ida
+                    if (count($asientosIda) != $numBilletes) {
+                        return redirect()->to('/reserva')->with('error', 'Debe marcar tantos asientos como número de billetes para el viaje de ida.');
+                    }
                 }
             }
 
