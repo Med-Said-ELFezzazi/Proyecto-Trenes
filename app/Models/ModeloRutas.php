@@ -43,14 +43,18 @@
     }
 
     // Obtener datos de rutas con datos seleccionados
-    public function datosRutas($hora_salida, $ciudad_origin, $ciudad_destino) {
-        $datosRutas = $this
-            ->where('hora_salida', $hora_salida)
-            ->where('origen', $ciudad_origin)
-            ->where('destino', $ciudad_destino)
-            ->orderBy('hora_salida', 'ASC')
-            ->findAll();
-        return $datosRutas;
+    public function datosRutas($fechaSeleccionada, $ciudadOrigin = null, $ciudadDestino = null) {
+        $builder = $this->where('hora_salida >=', $fechaSeleccionada)->orderBy('hora_salida', 'ASC');
+    
+        if ($ciudadOrigin) {
+            $builder->where('origen', $ciudadOrigin);
+        }
+    
+        if ($ciudadDestino) {
+            $builder->where('destino', $ciudadDestino);
+        }
+    
+        return $builder->findAll();
     }
     
     // Obtener datos de tarifas segund ciudad origen

@@ -20,7 +20,7 @@
                 <div class="card h-100">
                     <?php if (session()->get('admin')): ?>
                         <!-- Administraciñon de trenes -->
-                        <img src="<?= base_url('/images/tren.png')?>" class="card-img-top" style="height: 150px;">
+                        <img src="<?= base_url('/images/tren-moviendo.png')?>" class="card-img-top" style="height: 150px;">
                         <div class="card-body">
                             <h3 class="card-title">Administración de trenes</h3>
                             <p class="card-text">
@@ -72,7 +72,7 @@
                 <div class="card h-100">
                     <?php if (session()->get('admin')): ?>
                         <!-- Gestion de averias -->          
-                        <img src="<?= base_url('/images/averias.avif')?>" class="card-img-top" style="height: 150px;">
+                        <img src="<?= base_url('/images/averia2.png')?>" class="card-img-top" style="height: 150px;">
                         <div class="card-body">
                             <h3 class="card-title">Gestión de averías</h3>
                             <p class="card-text">

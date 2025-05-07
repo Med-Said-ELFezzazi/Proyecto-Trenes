@@ -20,12 +20,24 @@
 
             <div class="form-group">
                 <?= form_label('Origen:', 'origen') ?>
-                <?= form_input(['type' => 'text', 'name' => 'origen', 'id' => 'origen', 'value' => set_value('origen'), 'required' => true, 'class' => 'form-control']) ?>
+                <div class="d-flex align-items-center gap-2">
+                    <?= form_dropdown('origen', $opcionesCiudades, set_value('origen'), ['id' => 'origen', 'class' => 'form-control mr-3']) ?>
+                    <button type="button" id="addOrigen" class="btn btn-primary btn-sm">Añadir Ciudad</button>
+                </div>
+                <div id="origenInputContainer" class="mt-2" style="display: none;">
+                    <?= form_input(['type' => 'text', 'name' => 'nuevo_origen', 'id' => 'nuevo_origen', 'class' => 'form-control', 'placeholder' => 'Introduce una nueva ciudad para el origen']) ?>
+                </div>
             </div>
 
             <div class="form-group">
                 <?= form_label('Destino:', 'destino') ?>
-                <?= form_input(['type' => 'text', 'name' => 'destino', 'id' => 'destino', 'value' => set_value('destino'), 'required' => true, 'class' => 'form-control']) ?>
+                <div class="d-flex align-items-center gap-2">
+                    <?= form_dropdown('destino', $opcionesCiudades, set_value('destino'), ['id' => 'destino', 'class' => 'form-control mr-3']) ?>
+                    <button type="button" id="addDestino" class="btn btn-primary btn-sm">Añadir Ciudad</button>
+                </div>
+                <div id="destinoInputContainer" class="mt-2" style="display: none;">
+                    <?= form_input(['type' => 'text', 'name' => 'nuevo_destino', 'id' => 'nuevo_destino', 'class' => 'form-control', 'placeholder' => 'Introduce una nueva ciudad para el destino']) ?>
+                </div>
             </div>
 
             <div class="form-group">
@@ -70,5 +82,17 @@
         <?php endif; ?>
 
     </div>
+
+    <script>
+        document.getElementById('addOrigen').addEventListener('click', function () {
+            const container = document.getElementById('origenInputContainer');
+            container.style.display = container.style.display === 'none' ? 'block' : 'none';
+        });
+
+        document.getElementById('addDestino').addEventListener('click', function () {
+            const container = document.getElementById('destinoInputContainer');
+            container.style.display = container.style.display === 'none' ? 'block' : 'none';
+        });
+    </script>
 
 <?= $this->endSection(); ?>

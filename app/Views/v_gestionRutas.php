@@ -49,6 +49,9 @@
                         <br>
                         <div class="text-center">
                             <?= form_submit('filtrar', 'Aplicar Filtros', ['class' => 'btn btn-light']) ?>
+                        </div>
+                        <br>
+                        <div class="text-center">
                             <a href="<?= current_url() ?>" class="btn btn-secondary">Limpiar Filtros</a>
                         </div>
                     <?= form_close(); ?>
