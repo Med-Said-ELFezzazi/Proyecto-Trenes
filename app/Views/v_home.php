@@ -5,7 +5,7 @@
     <?php 
         // Mapeo de condiciones a vistas
         $vistas = [
-            'v_reserva' => isset($ciudadesOrg) && isset($ciudadesDes) || isset($servicios) || isset($msgError),
+            'v_reserva' => isset($ciudadesOrg) || isset($ciudadesDes) || isset($servicios) || isset($error) || isset($origenSeleccionado),
             'v_compra' => isset($compraOk) && isset($emailOk),
             'v_trenes' => isset($datosTrenes),
             'v_modTrens' => isset($trenMod),
