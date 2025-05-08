@@ -5,8 +5,9 @@
 
 <div class="row">
     <!-- Filtros -->
-    <h1 class="text-center">Lista de averías</h1>
-    <!-- Botón para cargar el formulario de añadir averia -->
+    <div class="col-12 text-center">
+        <h1>Lista de averías</h1>
+    </div>  <!-- Botón para cargar el formulario de añadir averia -->
     <div class="col-12 mb-2">
         <?= form_open(current_url(), ['method' => 'post']); ?>
             <?= form_hidden('mostrarForm', '1'); ?>
@@ -82,9 +83,8 @@
                     ?>
                 </p>
                 <div class="text-center">
-                    <?= form_submit('aplicarFiltros', 'Aplicar Filtros', ['class' => 'btn btn-light']) ?>
-                    <a href="<?= current_url() ?>" class="btn btn-secondary">Limpiar Filtros</a>
-                </div>
+                    <?= form_submit('aplicarFiltros', 'Aplicar Filtros', ['class' => 'btn btn-light', 'style' => 'margin-top: 10px;']) ?>
+                    <a href="<?= current_url() ?>" class="btn btn-secondary" style="margin-top: 10px;">Limpiar Filtros</a>  </div>
                 <?= form_close(); ?>
             </div>
         </div>
@@ -138,9 +138,9 @@
                             <a href="<?= site_url("/admin/averias/modificar/" . $averia->id_averia) ?>" class="btn btn-warning">Editar</a>
                         </td>
                         <td>
-                            <?= form_open(current_url(), ['method' => 'post']); ?>
+                            <?= form_open(current_url(), ['method' => 'post', 'class' => 'form-eliminar']); ?>
                                 <?= form_hidden('id_averiaBorrar', $averia->id_averia); ?>
-                                <?= form_input(['type' => 'submit', 'value' => 'Eliminar', 'class' => 'btn btn-danger']); ?>
+                                <?= form_input(['type' => 'submit', 'value' => 'Eliminar', 'class' => 'btn btn-danger eliminar-btn']); ?>
                             <?= form_close(); ?>
                         </td>
                     </tr>
@@ -149,3 +149,17 @@
         </table>
     </div>
 </div>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const deleteForms = document.querySelectorAll(".form-eliminar");
+
+    deleteForms.forEach(function(form) {
+        form.addEventListener("submit", function(event) {
+            const confirmed = confirm("¿Estás seguro de que deseas eliminar esta avería?");
+            if (!confirmed) {
+                event.preventDefault();
+            }
+        });
+    });
+});
+</script>

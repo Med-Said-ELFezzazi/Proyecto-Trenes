@@ -78,24 +78,38 @@ if (isset($_POST['aniadirTren'])) {
         <?php
         if (isset($_POST['borrarTren'])) {
             if (isset($eliminacionExisto)) {
-                // Eliminacion correcta
-                echo '<div class="alert alert-success" role="alert">';
-                echo 'El tren ha sido eliminado correctamente';
-                echo '<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>';
-                echo '</div>';
+            // Eliminacion correcta
+            echo '<div class="alert alert-success" role="alert">';
+            echo 'El tren ha sido eliminado correctamente';
+            echo '<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>';
+            echo '</div>';
             }
             if (isset($msgErrorEliTren)) {
-                // Eliminacion incorrecta
-                echo '<div class="alert alert-danger" role="alert">';
-                echo $msgErrorEliTren;
-                echo '<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>';
-                echo '</div>';
+            // Eliminacion incorrecta
+            echo '<div class="alert alert-danger" role="alert">';
+            echo $msgErrorEliTren;
+            echo '<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>';
+            echo '</div>';
             }
         }
+
+        // Add confirmation dialog for delete buttons
+        echo '<script>
+            document.addEventListener("DOMContentLoaded", function() {
+            const deleteButtons = document.querySelectorAll("input[name=\'borrarTren\']");
+            deleteButtons.forEach(function(button) {
+                button.addEventListener("click", function(event) {
+                if (!confirm("¿Estás seguro de eliminar este tren?")) {
+                    event.preventDefault();
+                }
+                });
+            });
+            });
+        </script>';
         ?>
 
         <!-- Tabla de infos de trenes -->

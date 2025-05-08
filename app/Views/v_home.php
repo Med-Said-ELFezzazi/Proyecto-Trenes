@@ -5,17 +5,17 @@
     <?php 
         // Mapeo de condiciones a vistas
         $vistas = [
-            'v_reserva' => isset($ciudadesOrg) || isset($ciudadesDes) || isset($servicios) || isset($error) || isset($origenSeleccionado),
+            'v_reserva' => isset($ciudadesOrg) && isset($ciudadesDes) || isset($servicios) || isset($msgError),
             'v_compra' => isset($compraOk) && isset($emailOk),
             'v_trenes' => isset($datosTrenes),
             'v_modTrens' => isset($trenMod),
             'v_averias' => isset($datosAverias) || isset($datosFiltrados),
             'v_modAveria' => isset($averia),
-            'v_altaAveria' => isset($matriculas),
+            'v_altaAveria' => isset($numsSeries),
             'v_rutas' => isset($datosRutas) || isset($datosFiltradosRutas),
             'v_modRuta' => isset($rutaAmodificar),
             'v_altaRuta' => isset($matriculasPaRutas),
-            //'vistaTemp' => isset($tsting),
+            'vistaTemp' => isset($tsting),
             'v_opinion' => isset($datosOpinion),
             'v_bienvenida' => true          // Vista por defecto 'dentro la vist v_bienvenida va la ligica de admin y cliente'
         ];
