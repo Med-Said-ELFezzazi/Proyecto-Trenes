@@ -806,7 +806,7 @@
                                         session()->get('ruta', $ruta)['fecha'], $horaFormateada, session()->get('ruta', $ruta)['tarifa']);
 
                 // Resetear las variables de session
-                session()->remove(['ruta', 'reservas']);
+                session()->remove(['ruta']);
 
                 return view("v_cancelReserva", ['reservas' => $reservas, 'ruta' => $ruta, 'reservasSeleccionadas' => $reservasSeleccionadas]);
             }
@@ -814,6 +814,146 @@
             return view("v_cancelReserva", ['reservas' => $reservas, 'ruta' => $ruta]);
         }
 
+
+
+        public function enviarEmailModificacion($emailCliente, $idReservas, $origen, $destino, $fecha, $horaSalida, $tarifa) {
+            // Obtener fecha y hora actual
+            $fechaModificacion = date('Y-m-d');
+            $horaModificacion = date('H:i');
+        
+            // Cuerpo del mensaje
+            $cuerpo = "
+            <h2 style='color: blue;'>Modificacion confirmada</h2>
+            <p>Tu reserva ha sido modificada con exito. Detalles del trayecto actualizado:</p>
+            <div style='border: 2px dashed #007bff; width: 500px; padding: 15px; background-color: #f8f9fa; font-family: sans-serif;'>
+                <table border='0' style='width: 100%; font-size: 14px;'>
+                <tr><td><b>IDs de reserva:</b></td><td>{$idReservas}</td></tr>
+                <tr><td><b>Fecha del viaje:</b></td><td>{$fecha}</td></tr>
+                <tr><td><b>Hora de salida:</b></td><td>{$horaSalida}</td></tr>
+                <tr><td><b>Origen:</b></td><td>{$origen}</td></tr>
+                <tr><td><b>Destino:</b></td><td>{$destino}</td></tr>
+                <tr><td><b>Tarifa aplicada:</b></td><td>{$tarifa} Euros</td></tr>
+                <tr><td><b>Fecha de modificacion:</b></td><td>{$fechaModificacion}</td></tr>
+                <tr><td><b>Hora de modificacion:</b></td><td>{$horaModificacion}</td></tr>
+                </table>
+            </div>
+            <br>
+            <p><i>Gracias por confiar en nosotros. ¡Buen viaje!</i></p>
+            ";
+        
+            $emailService = Services::emailService();
+            return $emailService->sendEmail(
+            $emailCliente,
+            'Confirmación de modificación de reserva',
+            $cuerpo
+            );
+        }
+
+
+        public function modificarReservasCli() {
+            $jsonReservas = $this->request->getPost('reservasObjs');
+            $jsonRuta = $this->request->getPost('rutaObjs');
+
+            // Conviertir a array asociativo
+            $reservas = json_decode($jsonReservas, true); 
+            $ruta = json_decode($jsonRuta, true);
+
+            session()->set('rutaMod', $ruta);
+
+            $reservasSeleccionadas = (array) $this->request->getPost('reservas');
+            
+            if (count($reservasSeleccionadas) > 0) {
+                // Quitar 'todos'
+                $reservasSeleccionadas = array_filter($reservasSeleccionadas, function($res){
+                    return $res !== 'todos';
+                });           
+                // Guardar las reservas seleccioandas a modificar
+                session()->set('reservasSeleccionadas', $reservasSeleccionadas);
+
+                // Ruta actual a cambiar
+                $rutaViaje = session()->get('rutaMod');     
+
+                // Obtener viajes que hay del mismo origen y destino con fecha del dia o futura
+                $viajesDisponibles = $this->modeloRutas
+                                    ->where('origen', $rutaViaje['origen'])
+                                    ->where('destino', $rutaViaje['destino'])
+                                    ->where('fecha >=', date("Y-m-d"))
+                                    ->where('id_ruta !=', $rutaViaje['id_ruta'])
+                                    ->findAll();
+
+                // Quitar la ruta de la reserva actual
+                $viajesDisponibles = array_filter($viajesDisponibles, function($rutas){
+                    return $rutas !== session()->get('rutaMod');
+                });
+
+                return view("v_modReserva", ['rutaMod' => session()->get('rutaMod'), 'reservasSeleccionadas' => $reservasSeleccionadas,
+                                            'viajesDisponibles' => $viajesDisponibles]);
+            } 
+            
+            // Id_ruta seleccionado 'la nueva ruta a poner'
+            $newIdRuta = $this->request->getpost('idRutaSele');
+            if ($newIdRuta != null) {
+                $idsReservas = '';
+                $cont = 0;
+                // Iterar sobre tadas las reservas seleccionadas
+                foreach (session()->get('reservasSeleccionadas') as $id_res) {
+                    // Comprobar si el asiento libre sino asignar uno aleatorio
+                    $numAsientoAntiguo = $this->modeloReservas
+                        ->where('id_ticket', $id_res)
+                        ->first()
+                        ->num_asiento;
+                    // Comprobar si el asiento esta libre en la nueva ruta 
+                    $asientosOcupados = $this->modeloReservas
+                            ->where('id_ruta', $newIdRuta)
+                            ->findAll();
+                    $asientos = [];
+                    $esLibre = true;
+                    foreach ($asientosOcupados as $reserva) {
+                        if ($reserva->num_asiento == $numAsientoAntiguo) {
+                            $esLibre = false;
+                            break;
+                        }
+                        $asientos[] = $reserva->num_asiento;
+                    }
+
+                    if ($esLibre) {
+                        // No cambiar el asiento solo la id_ruta
+                        $this->modeloReservas->update($id_res, ['id_ruta' => $newIdRuta]);
+                    } else {
+                        // Hacer la modificación de id_ruta de la reserva y num_asiento
+                        $numSerie = $this->modeloRutas->where('id_ruta', $newIdRuta)->first()->num_serie;
+
+                        // Generar un random en el rango de asientos que hay
+                        $capacidadMaxTren = $this->modeloTrenes
+                                            ->where('num_serie', $numSerie)->first()->capacidad;
+
+                        do {
+                            $randomAsiento = rand(1, $capacidadMaxTren);
+                        } while (in_array($randomAsiento, $asientos));
+
+                         $this->modeloReservas->update($id_res, ['id_ruta' => $newIdRuta, 'num_asiento' => $randomAsiento]);
+                    }
+                    if ($cont == count(session()->get('reservasSeleccionadas')) - 1) {
+                        $idsReservas .=  $id_res;
+                    } else {
+                        $idsReservas .= $id_res . ", ";
+                    }
+                    $cont++;
+                }
+
+                // ENVIAR EMAIL mandar un correo de la modificacion
+                $email = $this->modeloClientes->dameCliente(session()->get('dniCliente'))->email;
+                $objNewRuta = $this->modeloRutas->where('id_ruta', $newIdRuta)->first();
+
+
+                $this->enviarEmailModificacion($email, $idsReservas, $objNewRuta->origen, $objNewRuta->destino,
+                                        $objNewRuta->fecha,  $objNewRuta->hora_salida, $objNewRuta->tarifa);
+
+                return view("v_modReserva", ['reservasModificadas' => 'Operación realizada correctamente',]);
+            }
+
+            return view("v_modReserva", ['reservas' => $reservas, 'ruta' => $ruta]);
+        }
 
 
     } 

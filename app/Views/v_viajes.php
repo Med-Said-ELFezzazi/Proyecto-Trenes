@@ -125,7 +125,17 @@
                             </div>
                             <br>
                             <?php if ($esProxima): ?>
+                                <!-- Botón de posponer viaje -->
+                                <form action="<?= site_url('/modificarReserva') ?>" method="post" style="display: inline;">
+                                    <input type="hidden" name="reservasObjs" value='<?= json_encode($reservas) ?>'>
+                                    <input type="hidden" name="rutaObjs" value='<?= json_encode($ruta) ?>'>
+                                    <button type="submit" class="btn btn-warning">
+                                        <i class="fas fa-clock"></i>
+                                        Posponer <?= count($idsReservas) == 1 ? "reserva" : "reservas" ?>
+                                    </button>
+                                </form> 
 
+                                <!-- Botón cancelar reserva  -->
                                 <form action="<?= site_url('/cancelReserva') ?>" method="post" style="display: inline;">
                                     <!-- <input type="hidden" name="ids" value="<= implode(',', $idsReservas) ?>"> -->
                                     <input type="hidden" name="reservasObjs" value='<?= json_encode($reservas) ?>'>
