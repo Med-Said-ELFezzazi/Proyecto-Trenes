@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="<?= base_url('css/styleBars.css'); ?>" >
+    <link rel="stylesheet" href="<?= base_url('/css/styleBars.css?v=2'); ?>" >
   </head>
   <body>
 
